@@ -1,0 +1,24 @@
+version: '3'
+
+# define all microservices that
+# make up the whole application
+services:
+  db:                               # PostgreSQL database
+    image: postgres:alpine          # docker image (https://hub.docker.com/_/postgres)
+    restart: always                 # always restart the db when the app restarts
+    environment:
+      - POSTGRES_DB=pia-silhavyj    # database name
+      - POSTGRES_USER=postgres      # database "root" user
+      - POSTGRES_PASSWORD=password  # database "root" password
+      - "TZ=Europe/Prague"          # timezone
+    ports:
+      - "5432:5432"                 # expose port 5432 (PostgreSQL) out of the docker container to the local machine
+
+  mail:                             # email server (can be replaced with gmail later on)
+    image: maildev/maildev          # docker image (https://hub.docker.com/r/maildev/maildev)
+    restart: always                 # always restart the server when the app restarts
+    ports:
+      - "25:25"                     # expose port 25 (SMTP) out of the docker container to the local machine
+      - "80:80"                     # expose port 80 (HTTP - web UI) out of the docker container to the local machine
+    environment:
+      - "TZ=Europe/Prague"          # timezone

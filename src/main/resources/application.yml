@@ -1,0 +1,58 @@
+server:
+  error:
+    include-message: always                               # enable showing all errors (helps when troubleshooting)
+    include-binding-errors: always                        # it should be turned off when the app is deployed (vulnerability)
+
+spring:
+  datasource:                                             # connection to the database
+    username: postgres                                    # user
+    password: password                                    # password
+    url: jdbc:postgresql://localhost:5432/pia-silhavyj    # the database is running in a Docker container
+                                                          # with port 5432 exposed to the local machine
+  jpa:
+    hibernate:
+      ddl-auto: create                                    # create a database called 'pia-silhavyj' on startup and drop it afterwards
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+  mail:
+    host: localhost                                       # the mail server is running in a Docker container
+    port: 25                                              # with post 25 exposed to the local machine
+    username: admin                                       # username
+    password: 123                                         # password
+
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
+application:
+  url:  http://localhost:8080
+  senderemail: socialnetwork@silhavyj.pia.kiv.zcu.cz     # email address of the sender
+
+  users:                                                 # default users that will be added to the database
+    -                                                    # automatically when the application starts
+      firstname: user1
+      lastname: user1
+      password: User1-123*
+      email: user1@silhavyj.pia.kiv.zcu.cz
+      dob: "2006-10-27"
+      role: USER
+
+    -
+      firstname: user2
+      lastname: user2
+      password: User2-123*
+      email: user2@silhavyj.pia.kiv.zcu.cz
+      dob: "1998-04-09"
+      role: USER

@@ -9,4 +9,5 @@ public interface IUserService {
     void encryptUserPassword(User user);
     void saveUser(User user);
     Optional<User> getUserByEmail(String email);
+    void deleteUserByEmail(String email);
 }

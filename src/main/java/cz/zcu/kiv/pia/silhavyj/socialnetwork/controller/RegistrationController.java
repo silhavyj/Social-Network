@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserConstants.SIGN_IN_FORM_MSG_NAME;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConstants.SIGN_IN_FORM_MSG_NAME;
 
 @Controller
 @RequiredArgsConstructor

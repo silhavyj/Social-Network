@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.UserConstants.*;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole.USER;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -33,25 +34,25 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Firstname cannot be empty")
-    @Size(min = 2, max = 255, message = "Firstname length should be between 2 and 255")
+    @NotEmpty(message = FIRSTNAME_EMPTY_ERR_MSG)
+    @Size(min = FIRSTNAME_MIN_LENGTH, max = FIRSTNAME_MAX_LENGTH, message = FIRSTNAME_INVALID_LENGTH_ERR_MSG)
     private String firstname;
 
-    @NotEmpty(message = "Lastname cannot be empty")
-    @Size(min = 2, max = 255, message = "Lastname length should be between 2 and 255")
+    @NotEmpty(message = LASTNAME_EMPTY_ERR_MSG)
+    @Size(min = LASTNAME_MIN_LENGTH, max = LASTNAME_MAX_LENGTH, message = LASTNAME_INVALID_LENGTH_ERR_MSG)
     private String lastname;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @SecurePasswordConstraint(message = "Password is not secure enough")
+    @SecurePasswordConstraint(message = INSECURE_PASSWORD_ERR_MSG)
     private String password;
 
-    @NotNull(message = "Date of birth cannot be empty")
+    @NotNull(message = DOB_EMPTY_ERR_MSG)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @SecureDobConstraint
     private LocalDate dob;
 
-    @NotEmpty(message = "E-mail cannot be empty")
-    @Email(message = "E-mail is not valid")
+    @NotEmpty(message = EMAIL_EMPTY_ERR_MSG)
+    @Email(message = EMAIL_INVALID_ERR_MSG)
     @Column(unique = true)
     private String email;
 

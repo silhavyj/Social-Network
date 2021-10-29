@@ -9,9 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserConstants.INVALID_CREDENTIALS_ERR_MSG;
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserConstants.*;
-
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConstants.*;
 @Service
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
@@ -24,7 +22,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
         String errorMsg = INVALID_CREDENTIALS_ERR_MSG;
 
-        if (exception.getMessage().equalsIgnoreCase(LOCKED_ACCOUNT)) {
+        if (exception.getMessage().equalsIgnoreCase(LOCKED_ACCOUNT_FLAG)) {
             errorMsg = LOCKED_ACCOUNT_ERR_MSG;
         }
 

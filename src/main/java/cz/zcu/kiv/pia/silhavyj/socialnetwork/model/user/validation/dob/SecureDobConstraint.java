@@ -12,7 +12,7 @@ import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.dob.Do
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SecureDobConstraint {
 
-    String message() default "you must be at least " + MINIMAL_AGE_FOR_REGISTRATION_REQUIRED + " years old";
+    String message() default "You must be at least " + MINIMAL_AGE_FOR_REGISTRATION_REQUIRED + " years old";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

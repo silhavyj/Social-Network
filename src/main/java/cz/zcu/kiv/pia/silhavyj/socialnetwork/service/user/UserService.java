@@ -14,7 +14,8 @@ import javax.transaction.Transactional;
 
 import java.util.Optional;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserConstants.LOCKED_ACCOUNT;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConstants.EMAIL_NOT_FOUND_ERR_MSG;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConstants.LOCKED_ACCOUNT_FLAG;
 
 @Service
 @Transactional
@@ -26,9 +27,9 @@ public class UserService implements UserDetailsService, IUserService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("E-mail address not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(EMAIL_NOT_FOUND_ERR_MSG));
         if (user.getLocked() == true)
-            throw new RuntimeException(LOCKED_ACCOUNT);
+            throw new RuntimeException(LOCKED_ACCOUNT_FLAG);
         return user;
     }
 
@@ -46,5 +47,10 @@ public class UserService implements UserDetailsService, IUserService {
     @Override
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public void deleteUserByEmail(String email) {
+        userRepository.deleteByEmail(email);
     }
 }

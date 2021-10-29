@@ -52,4 +52,9 @@ public class RegistrationService implements IRegistrationService {
         final Token token = new Token(user, REGISTRATION_TOKEN_MIN_VALIDATION, REGISTRATION);
         tokenService.saveToken(token);
     }
+
+    @Override
+    public void activateUserAccount(String token) {
+        // TODO
+    }
 }

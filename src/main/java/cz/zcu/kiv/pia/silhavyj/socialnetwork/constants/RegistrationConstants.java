@@ -8,7 +8,8 @@ public class RegistrationConstants {
     public static final int REGISTRATION_TOKEN_MIN_VALIDATION = 1;
     public static final int RESET_PASSWORD_TOKEN_MIN_VALIDATION = 1;
 
-    public static final String SIGN_IN_FORM_MSG_NAME = "msg";
+    public static final String SIGN_IN_FORM_INFO_MSG_NAME = "info_msg";
+    public static final String SIGN_IN_FORM_SUCCESS_MSG_NAME = "success_msg";
     public static final String SIGN_UP_ERROR_MSG_NAME = "error_msg";
     public static final String RESET_PASSWORD_ERR_MSG_NAME = "error_msg";
 
@@ -18,4 +19,6 @@ public class RegistrationConstants {
     public static final String EMAIL_ALREADY_TAKEN_ERR_MSG = "This e-mail address is already taken";
 
     public static final String LOCKED_ACCOUNT_FLAG = "locked";
+
+    public static final String ACCOUNT_HAS_BEEN_ACTIVATED_INFO_MSG = "Your account has been successfully activated";
 }

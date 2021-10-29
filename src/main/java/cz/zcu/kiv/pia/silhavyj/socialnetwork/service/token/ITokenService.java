@@ -6,7 +6,10 @@ import java.util.Optional;
 
 public interface ITokenService {
 
-    Optional<Token> getRegistrationToken(String email);
+    Optional<Token> getRegistrationTokenByUserEmail(String email);
+    Optional<Token> getRegistrationTokenByTokenValue(String token);
+    Optional<Token> getResetPasswordTokenByUserEmail(String email);
+    Optional<Token> getResetPasswordTokenByTokenValue(String token);
     void deleteToken(Token token);
     void saveToken(Token token);
 }

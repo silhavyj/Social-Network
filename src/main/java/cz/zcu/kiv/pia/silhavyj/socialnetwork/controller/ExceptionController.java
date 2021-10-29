@@ -1,6 +1,6 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.controller;
 
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.exceptions.ResetPasswordEmailNotFoundException;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.exceptions.ResetPasswordException;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.exceptions.SignUpException;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
 import org.springframework.ui.Model;
@@ -12,8 +12,8 @@ import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConsta
 @ControllerAdvice
 public class ExceptionController {
 
-    @ExceptionHandler(value = {ResetPasswordEmailNotFoundException.class})
-    public String resetPasswordEmailNotFoundException(ResetPasswordEmailNotFoundException exception, Model model) {
+    @ExceptionHandler(value = {ResetPasswordException.class})
+    public String resetPasswordEmailNotFoundException(ResetPasswordException exception, Model model) {
         model.addAttribute(RESET_PASSWORD_ERR_MSG_NAME, exception.getMessage());
         return "reset-password";
     }

@@ -11,5 +11,14 @@ import java.util.Optional;
 public interface ITokenRepository extends JpaRepository<Token, Long> {
 
     @Query("SELECT token from Token token WHERE token.user.email = ?1 AND token.tokenType = cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.TokenType.REGISTRATION")
-    Optional<Token> getRegistrationTokenByEmail(String email);
+    Optional<Token> findRegistrationTokenByEmail(String email);
+
+    @Query("SELECT token from Token token WHERE token.value = ?1 AND token.tokenType = cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.TokenType.REGISTRATION")
+    Optional<Token> findRegistrationTokenByValue(String value);
+
+    @Query("SELECT token from Token token WHERE token.user.email = ?1 AND token.tokenType = cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.TokenType.RESET_PASSWORD")
+    Optional<Token> findResetPasswordTokenByEmail(String email);
+
+    @Query("SELECT token from Token token WHERE token.value = ?1 AND token.tokenType = cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.TokenType.RESET_PASSWORD")
+    Optional<Token> findResetPasswordTokenByValue(String value);
 }

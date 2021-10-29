@@ -45,7 +45,7 @@ public class RegistrationController {
     @PostMapping("/reset-password")
     public String forgotPassword(@Valid @Email String email, RedirectAttributes redirectAttributes) {
         registrationService.sendTokenForResettingPassword(email);
-        redirectAttributes.addFlashAttribute(SIGN_IN_FORM_INFO_MSG_NAME, "Please confirm your intention to change the password through e-mail");
+        redirectAttributes.addFlashAttribute(SIGN_IN_FORM_INFO_MSG_NAME, CONFIRM_CHANGE_PASSWORD_INFO_MSG);
         return "redirect:/sign-in";
     }
 
@@ -54,7 +54,7 @@ public class RegistrationController {
         if (result.hasErrors())
             return "sign-up";
         registrationService.signUpUser(user);
-        redirectAttributes.addFlashAttribute(SIGN_IN_FORM_INFO_MSG_NAME, "Please confirm your e-mail address to finish the registration");
+        redirectAttributes.addFlashAttribute(SIGN_IN_FORM_INFO_MSG_NAME, CONFIRM_EMAIL_ADDRESS_INTO_MSG);
         return "redirect:/sign-in";
     }
 
@@ -62,6 +62,13 @@ public class RegistrationController {
     public String confirmRegistration(@RequestParam String token, Model model) {
         registrationService.activateUserAccount(token);
         model.addAttribute(SIGN_IN_FORM_SUCCESS_MSG_NAME, ACCOUNT_HAS_BEEN_ACTIVATED_INFO_MSG);
+        return "sign-in";
+    }
+
+    @GetMapping("/reset-password/confirm")
+    public String forgotPassword(@RequestParam String token, Model model) {
+        registrationService.changeUserPassword(token);
+        model.addAttribute(SIGN_IN_FORM_SUCCESS_MSG_NAME, PASSWORD_HAS_BEEN_RESET_INFO_MSG);
         return "sign-in";
     }
 }

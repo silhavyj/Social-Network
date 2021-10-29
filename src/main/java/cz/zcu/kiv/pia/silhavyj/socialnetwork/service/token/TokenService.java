@@ -16,8 +16,23 @@ public class TokenService implements ITokenService {
     private final ITokenRepository tokenRepository;
 
     @Override
-    public Optional<Token> getRegistrationToken(String email) {
-        return tokenRepository.getRegistrationTokenByEmail(email);
+    public Optional<Token> getRegistrationTokenByUserEmail(String email) {
+        return tokenRepository.findRegistrationTokenByEmail(email);
+    }
+
+    @Override
+    public Optional<Token> getRegistrationTokenByTokenValue(String token) {
+        return tokenRepository.findRegistrationTokenByValue(token);
+    }
+
+    @Override
+    public Optional<Token> getResetPasswordTokenByUserEmail(String email) {
+        return tokenRepository.findResetPasswordTokenByEmail(email);
+    }
+
+    @Override
+    public Optional<Token> getResetPasswordTokenByTokenValue(String token) {
+        return tokenRepository.findResetPasswordTokenByValue(token);
     }
 
     @Override

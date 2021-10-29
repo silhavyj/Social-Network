@@ -19,7 +19,7 @@ public class Token {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String token;
+    private String value;
 
     private LocalDateTime createdAt;
 
@@ -34,7 +34,7 @@ public class Token {
 
     public Token(User user, int minutesValidFor, TokenType type) {
         this.user = user;
-        this.token = UUID.randomUUID().toString();
+        this.value = UUID.randomUUID().toString();
         this.createdAt = LocalDateTime.now();
         this.expiresAt = createdAt.plusMinutes(minutesValidFor);
         this.tokenType = type;

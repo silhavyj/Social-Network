@@ -1,9 +1,10 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.registration;
 
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.exceptions.ResetPasswordEmailNotFoundException;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.exceptions.ResetPasswordException;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.exceptions.SignUpException;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.Token;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.password.RandomPasswordGenerator;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.token.ITokenService;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConstants.*;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.TokenType.REGISTRATION;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.TokenType.RESET_PASSWORD;
 import static java.time.LocalDateTime.now;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
@@ -22,16 +24,29 @@ public class RegistrationService implements IRegistrationService {
 
     private final IUserService userService;
     private final ITokenService tokenService;
+    private final RandomPasswordGenerator randomPasswordGenerator;
 
     @Override
     public void sendTokenForResettingPassword(String email) {
         User user = userService.getUserByEmail(email).orElseThrow(() ->
-                new ResetPasswordEmailNotFoundException(RESET_PASSWORD_EMAIL_NOT_FOUND_ERR_MSG));
+                new ResetPasswordException(RESET_PASSWORD_EMAIL_NOT_FOUND_ERR_MSG));
+
+        Optional<Token> previousToken = tokenService.getResetPasswordTokenByUserEmail(email);
+        if (previousToken.isPresent()) {
+            if (previousToken.get().getExpiresAt().isBefore(now())) {
+                tokenService.deleteToken(previousToken.get());
+            } else {
+                long remainingSecond = SECONDS.between(now(), previousToken.get().getExpiresAt());
+                throw new ResetPasswordException(String.format(RESET_PASSWORD_TOKEN_ALREADY_ISSUED_ERR_MSG, remainingSecond));
+            }
+        }
+        Token token = new Token(user, RESET_PASSWORD_TOKEN_MIN_VALIDATION, RESET_PASSWORD);
+        tokenService.saveToken(token);
     }
 
     @Override
     public void signUpUser(User user) {
-        Optional<Token> previousToken = tokenService.getRegistrationToken(user.getEmail());
+        Optional<Token> previousToken = tokenService.getRegistrationTokenByUserEmail(user.getEmail());
         if (previousToken.isPresent()) {
             if (previousToken.get().getExpiresAt().isBefore(now())) {
                 tokenService.deleteToken(previousToken.get());
@@ -54,7 +69,30 @@ public class RegistrationService implements IRegistrationService {
     }
 
     @Override
-    public void activateUserAccount(String token) {
-        // TODO
+    public void activateUserAccount(String tokenValue) {
+        Token token = tokenService
+                .getRegistrationTokenByTokenValue(tokenValue)
+                .orElseThrow(() -> new SignUpException(INVALID_REGISTRATION_TOKEN));
+
+        User user = token.getUser();
+        user.setEnabled(true);
+        userService.saveUser(user);
+
+        tokenService.deleteToken(token);
+    }
+
+    @Override
+    public void changeUserPassword(String tokenValue) {
+        Token token = tokenService
+                .getResetPasswordTokenByTokenValue(tokenValue)
+                .orElseThrow(() -> new SignUpException(INVALID_RESET_PASSWORD_TOKEN));
+
+        User user = token.getUser();
+        String newPassword = randomPasswordGenerator.generatePassword();
+        user.setPassword(newPassword);
+        userService.encryptUserPassword(user);
+        userService.saveUser(user);
+
+        tokenService.deleteToken(token);
     }
 }

@@ -1,4 +1,4 @@
-package cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.password;
+package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.passwordgen;
 
 import org.passay.CharacterData;
 import org.passay.CharacterRule;
@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.password.PasswordConstants.*;
 
 @Service
-public class RandomPasswordGenerator {
+public class RandomPasswordGenerator implements IPasswordGenerator {
 
+    @Override
     public String generatePassword() {
         PasswordGenerator gen = new PasswordGenerator();
         CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
@@ -40,5 +41,4 @@ public class RandomPasswordGenerator {
         String password = gen.generatePassword(MINIMAL_PASSWORD_LENGTH, splCharRule, lowerCaseRule, upperCaseRule, digitRule);
         return password;
     }
-
 }

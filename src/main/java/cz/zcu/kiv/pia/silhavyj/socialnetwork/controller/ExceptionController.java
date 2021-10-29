@@ -1,13 +1,13 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.controller;
 
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.exceptions.ResetPasswordException;
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.exceptions.SignUpException;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.exception.ResetPasswordException;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.exception.SignUpException;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConstants.*;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
 
 @ControllerAdvice
 public class ExceptionController {

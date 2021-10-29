@@ -1,10 +1,11 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.registration;
 
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.exceptions.ResetPasswordException;
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.exceptions.SignUpException;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.exception.ResetPasswordException;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.exception.SignUpException;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.Token;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.password.RandomPasswordGenerator;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.email.IEmailSenderHelper;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.passwordgen.IPasswordGenerator;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.token.ITokenService;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConstants.*;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.TokenType.REGISTRATION;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.TokenType.RESET_PASSWORD;
 import static java.time.LocalDateTime.now;
@@ -24,7 +25,8 @@ public class RegistrationService implements IRegistrationService {
 
     private final IUserService userService;
     private final ITokenService tokenService;
-    private final RandomPasswordGenerator randomPasswordGenerator;
+    private final IPasswordGenerator randomPasswordGenerator;
+    private final IEmailSenderHelper emailSenderHelper;
 
     @Override
     public void sendTokenForResettingPassword(String email) {
@@ -42,6 +44,7 @@ public class RegistrationService implements IRegistrationService {
         }
         Token token = new Token(user, RESET_PASSWORD_TOKEN_MIN_VALIDATION, RESET_PASSWORD);
         tokenService.saveToken(token);
+        emailSenderHelper.sendPasswordResetConfirmationEmail(user, token.getValue());
     }
 
     @Override
@@ -66,6 +69,7 @@ public class RegistrationService implements IRegistrationService {
 
         final Token token = new Token(user, REGISTRATION_TOKEN_MIN_VALIDATION, REGISTRATION);
         tokenService.saveToken(token);
+        emailSenderHelper.sendSingUpConfirmationEmail(user, token.getValue());
     }
 
     @Override
@@ -79,6 +83,7 @@ public class RegistrationService implements IRegistrationService {
         userService.saveUser(user);
 
         tokenService.deleteToken(token);
+        emailSenderHelper.sendThankYouForRegisteringEmail(user);
     }
 
     @Override
@@ -94,5 +99,6 @@ public class RegistrationService implements IRegistrationService {
         userService.saveUser(user);
 
         tokenService.deleteToken(token);
+        emailSenderHelper.sendNewPasswordToUser(user, newPassword);
     }
 }

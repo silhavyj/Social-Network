@@ -1,4 +1,4 @@
-package cz.zcu.kiv.pia.silhavyj.socialnetwork.constants;
+package cz.zcu.kiv.pia.silhavyj.socialnetwork.constant;
 
 public class UserConstants {
 

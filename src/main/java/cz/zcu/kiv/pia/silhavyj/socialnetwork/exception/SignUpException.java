@@ -1,4 +1,4 @@
-package cz.zcu.kiv.pia.silhavyj.socialnetwork.exceptions;
+package cz.zcu.kiv.pia.silhavyj.socialnetwork.exception;
 
 public class SignUpException extends RuntimeException {
 

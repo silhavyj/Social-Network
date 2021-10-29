@@ -13,8 +13,8 @@ import javax.transaction.Transactional;
 
 import java.util.Optional;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConstants.EMAIL_NOT_FOUND_ERR_MSG;
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConstants.LOCKED_ACCOUNT_FLAG;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.EMAIL_NOT_FOUND_ERR_MSG;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.LOCKED_ACCOUNT_FLAG;
 
 @Service
 @Transactional

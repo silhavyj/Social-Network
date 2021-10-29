@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConstants.*;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,13 +42,6 @@ public class RegistrationController {
         return "sign-in";
     }
 
-    @PostMapping("/reset-password")
-    public String forgotPassword(@Valid @Email String email, RedirectAttributes redirectAttributes) {
-        registrationService.sendTokenForResettingPassword(email);
-        redirectAttributes.addFlashAttribute(SIGN_IN_FORM_INFO_MSG_NAME, CONFIRM_CHANGE_PASSWORD_INFO_MSG);
-        return "redirect:/sign-in";
-    }
-
     @PostMapping("/sign-up")
     public String signUp(@Valid User user, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors())
@@ -63,6 +56,13 @@ public class RegistrationController {
         registrationService.activateUserAccount(token);
         model.addAttribute(SIGN_IN_FORM_SUCCESS_MSG_NAME, ACCOUNT_HAS_BEEN_ACTIVATED_INFO_MSG);
         return "sign-in";
+    }
+
+    @PostMapping("/reset-password")
+    public String forgotPassword(@Valid @Email String email, RedirectAttributes redirectAttributes) {
+        registrationService.sendTokenForResettingPassword(email);
+        redirectAttributes.addFlashAttribute(SIGN_IN_FORM_INFO_MSG_NAME, CONFIRM_CHANGE_PASSWORD_INFO_MSG);
+        return "redirect:/sign-in";
     }
 
     @GetMapping("/reset-password/confirm")

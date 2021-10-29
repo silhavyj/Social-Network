@@ -1,6 +1,6 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.config;
 
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.CustomAuthenticationFailureHandler;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.exception.CustomAuthenticationFailureHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

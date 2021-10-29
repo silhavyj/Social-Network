@@ -6,6 +6,6 @@ public interface IRegistrationService {
 
     void sendTokenForResettingPassword(String email);
     void signUpUser(User user);
-    void activateUserAccount(String tokenValue);
+    void activateUserAccount(String token);
     void changeUserPassword(String tokenValue);
 }

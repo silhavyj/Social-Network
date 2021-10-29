@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.UserConstants.*;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.UserConstants.*;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole.USER;
 import static javax.persistence.GenerationType.IDENTITY;
 

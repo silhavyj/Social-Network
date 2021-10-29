@@ -1,4 +1,4 @@
-package cz.zcu.kiv.pia.silhavyj.socialnetwork.service;
+package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.exception;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constants.RegistrationConstants.*;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
+
 @Service
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 

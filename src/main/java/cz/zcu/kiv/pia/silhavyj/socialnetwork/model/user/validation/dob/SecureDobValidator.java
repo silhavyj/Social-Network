@@ -3,6 +3,7 @@ package cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.dob;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.dob.DobConstants.MINIMAL_AGE_FOR_REGISTRATION_REQUIRED;
 import static java.time.LocalDate.now;
@@ -16,6 +17,6 @@ public class SecureDobValidator implements ConstraintValidator<SecureDobConstrai
 
     @Override
     public boolean isValid(LocalDate dob, ConstraintValidatorContext constraintValidatorContext) {
-        return dob.isBefore(now().minusYears(MINIMAL_AGE_FOR_REGISTRATION_REQUIRED));
+        return dob != null && dob.isBefore(now().minusYears(MINIMAL_AGE_FOR_REGISTRATION_REQUIRED));
     }
 }

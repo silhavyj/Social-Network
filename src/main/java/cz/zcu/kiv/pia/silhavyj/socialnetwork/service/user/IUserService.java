@@ -8,6 +8,5 @@ public interface IUserService {
 
     void encryptUserPassword(User user);
     void saveUser(User user);
-    void sendTokenForResettingPassword(String email);
     Optional<User> getUserByEmail(String email);
 }

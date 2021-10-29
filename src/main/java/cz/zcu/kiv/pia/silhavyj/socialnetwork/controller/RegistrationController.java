@@ -1,9 +1,10 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.controller;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.registration.IRegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -17,7 +18,7 @@ import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserConstants.SIG
 @RequiredArgsConstructor
 public class RegistrationController {
 
-    private final IUserService userService;
+    private final IRegistrationService registrationService;
 
     @GetMapping("/sign-in")
     public String signIn() {
@@ -41,8 +42,17 @@ public class RegistrationController {
 
     @PostMapping("/reset-password")
     public String forgotPassword(@Valid @Email String email, RedirectAttributes redirectAttributes) {
-        userService.sendTokenForResettingPassword(email);
+        registrationService.sendTokenForResettingPassword(email);
         redirectAttributes.addFlashAttribute(SIGN_IN_FORM_MSG_NAME, "Please confirm your intention to change the password through e-mail");
+        return "redirect:/sign-in";
+    }
+
+    @PostMapping("/sign-up")
+    public String signUp(@Valid User user, BindingResult result, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors())
+            return "sign-up";
+        registrationService.signUpUser(user);
+        redirectAttributes.addFlashAttribute(SIGN_IN_FORM_MSG_NAME, "Please confirm your e-mail address to finish the registration");
         return "redirect:/sign-in";
     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.dob.SecureDobConstraint;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.password.SecurePasswordConstraint;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,6 +46,7 @@ public class User implements UserDetails {
     private String password;
 
     @NotNull(message = "Date of birth cannot be empty")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @SecureDobConstraint
     private LocalDate dob;
 

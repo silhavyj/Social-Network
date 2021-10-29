@@ -30,7 +30,6 @@ public class SocialNetworkApplication implements CommandLineRunner {
 		appConfiguration.getUsers().stream()
 				.forEach(defaultUserConfig -> {
 					User user = defaultUserConfig.buildUser(); // create User
-					user.setLocked(true);
 					userService.encryptUserPassword(user);	   // encrypt their password
 					userService.saveUser(user);				   // store them in the database
 				});

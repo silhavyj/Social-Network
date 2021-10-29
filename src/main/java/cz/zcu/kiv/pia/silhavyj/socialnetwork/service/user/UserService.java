@@ -15,7 +15,6 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserConstants.LOCKED_ACCOUNT;
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserConstants.RESET_PASSWORD_EMAIL_NOT_FOUND_ERR_MSG;
 
 @Service
 @Transactional
@@ -45,14 +44,7 @@ public class UserService implements UserDetailsService, IUserService {
     }
 
     @Override
-    public void sendTokenForResettingPassword(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() ->
-                new ResetPasswordEmailNotFoundException(RESET_PASSWORD_EMAIL_NOT_FOUND_ERR_MSG));
-    }
-
-    @Override
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
 }

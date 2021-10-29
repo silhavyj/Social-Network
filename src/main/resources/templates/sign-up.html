@@ -8,7 +8,52 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-
+    <div class="container" style="width: 400px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <div class="panel-heading"><h2 class="panel-title"><strong>Sign Up</strong></h2></div>
+        <div class="panel-body">
+            <form role="form" th:action="@{/sign-up}" th:object="${user}" th:method="post">
+                <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error: </strong>
+                    <span th:text="${#fields.errors().get(0)}"></span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label>Firstname</label>
+                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname" th:field="*{firstname}">
+                </div>
+                <div class="form-group">
+                    <label>Lastname</label>
+                    <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Lastname" th:field="*{lastname}">
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" class="form-control" id="username" name="username" placeholder="E-mail" th:field="*{email}">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" th:field="*{password}">
+                </div>
+                <div class="form-group">
+                    <label>Date of birth</label>
+                    <input class="form-control" type="date" id="dob" name="dob" th:field="*{dob}">
+                </div>
+                <div class="form-group">
+                    <label for="inputState">Gender</label>
+                    <select id="inputState" class="form-control" th:field="*{gender}">
+                        <option value="UNDEFINED">Undefined</option>
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-dark">Sign up</button>
+                    <a class="link-secondary" th:href="@{/sign-in}">Sign in</a>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>

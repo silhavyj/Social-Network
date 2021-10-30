@@ -12,5 +12,5 @@ public interface IUserService {
     void saveUser(User user);
     Optional<User> getUserByEmail(String email);
     void deleteUserByEmail(String email);
-    void updateProfilePicture(User user, MultipartFile profilePicture) throws IOException;
+    void updateProfilePicture(User user, MultipartFile profilePicture);
 }

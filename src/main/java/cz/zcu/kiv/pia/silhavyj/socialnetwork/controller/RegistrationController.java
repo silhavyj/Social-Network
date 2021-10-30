@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,7 @@ import javax.validation.constraints.Email;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
 
 @Controller
+@Validated
 @RequiredArgsConstructor
 public class RegistrationController {
 
@@ -47,7 +49,7 @@ public class RegistrationController {
         if (result.hasErrors())
             return "sign-up";
         registrationService.signUpUser(user);
-        redirectAttributes.addFlashAttribute(SIGN_IN_FORM_INFO_MSG_NAME, CONFIRM_EMAIL_ADDRESS_INTO_MSG);
+        redirectAttributes.addFlashAttribute(SIGN_IN_FORM_INFO_MSG_NAME, CONFIRM_EMAIL_ADDRESS_INFO_MSG);
         return "redirect:/sign-in";
     }
 

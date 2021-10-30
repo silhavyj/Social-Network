@@ -27,5 +27,5 @@ public class RegistrationConstants {
     public static final String PASSWORD_HAS_BEEN_RESET_INFO_MSG = "Your password has been reset. Please check your email";
 
     public static final String CONFIRM_CHANGE_PASSWORD_INFO_MSG = "Please confirm your intention to change the password through e-mail";
-    public static final String CONFIRM_EMAIL_ADDRESS_INTO_MSG = "Please confirm your e-mail address to finish the registration";
+    public static final String CONFIRM_EMAIL_ADDRESS_INFO_MSG = "Please confirm your e-mail address to finish the registration";
 }

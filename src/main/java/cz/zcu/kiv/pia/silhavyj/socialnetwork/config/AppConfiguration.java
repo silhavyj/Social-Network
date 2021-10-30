@@ -1,5 +1,6 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.config;
 
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.Gender;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole;
 import lombok.*;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.Gender.UNDEFINED;
 
 @Getter
 @Setter
@@ -41,6 +44,7 @@ public class AppConfiguration {
         private String email;
         private String role;
         private String dob;
+        private Gender gender = UNDEFINED;
 
         public User buildUser() {
             User user = new User();
@@ -49,6 +53,7 @@ public class AppConfiguration {
             user.setLastname(lastname);
             user.setEmail(email);
             user.setPassword(password);
+            user.setGender(gender);
             user.setDob(LocalDate.parse(dob));
 
             user.setEnabled(true);

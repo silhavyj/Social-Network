@@ -48,6 +48,7 @@ application:
       email: user1@silhavyj.pia.kiv.zcu.cz
       dob: "2006-10-27"
       role: USER
+      gender: MALE
 
     -
       firstname: user2

@@ -2,6 +2,8 @@ package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.email;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.config.AppConfiguration;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import javax.mail.internet.MimeMessage;
 @Service
 @RequiredArgsConstructor
 public class EmailSender implements IEmailSender {
+
+    private static final Logger logger = LoggerFactory.getLogger(EmailSender.class);
 
     private final AppConfiguration appConfiguration;
     private final JavaMailSender javaMailSender;
@@ -29,7 +33,7 @@ public class EmailSender implements IEmailSender {
 
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            throw new IllegalStateException("failed to send email");
+            logger.error(String.format("failed to send email of subject '%s' to '%s'", subject, to), e.getMessage());
         }
     }
 }

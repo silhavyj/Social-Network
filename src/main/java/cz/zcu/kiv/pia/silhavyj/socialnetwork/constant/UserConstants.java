@@ -18,5 +18,10 @@ public class UserConstants {
 
     public static final String EMAIL_EMPTY_ERR_MSG = "E-mail cannot be empty";
     public static final String EMAIL_INVALID_ERR_MSG = "Invalid e-mail address";
-}
 
+    public static final String PROFILE_IMAGES_DIRECTORY = "images";
+    public static final String DEFAULT_PROFILE_IMAGE_PATH =  PROFILE_IMAGES_DIRECTORY + "/" + "default_user_picture.png";
+
+    public static final String CREATING_PROFILE_PIC_DIR_FAILED_ERR_MSG = "Creating a directory to store profile pictures failed";
+    public static final String SAVING_PROFILE_PICTURE_FAILED_ERR_MSG = "Storing an image into the profile picture directory failed";
+}

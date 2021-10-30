@@ -72,6 +72,8 @@ public class User implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Boolean enabled = false;
 
+    private String profilePicturePath = DEFAULT_PROFILE_IMAGE_PATH;
+
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

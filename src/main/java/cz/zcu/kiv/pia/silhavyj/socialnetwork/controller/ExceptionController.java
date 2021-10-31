@@ -6,7 +6,9 @@ import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.ProfileConstants.PROFILE_ERROR_MSG_NAME;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
 
 @ControllerAdvice
@@ -23,5 +25,11 @@ public class ExceptionController {
         model.addAttribute(new User());
         model.addAttribute(SIGN_UP_ERROR_MSG_NAME, signUpRuntimeException.getMessage());
         return "sign-up";
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public String handleFileSizeLimitExceeded(MaxUploadSizeExceededException exception, Model model) {
+        model.addAttribute(PROFILE_ERROR_MSG_NAME, "File's too big");
+        return "profile";
     }
 }

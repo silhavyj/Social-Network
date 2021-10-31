@@ -13,4 +13,5 @@ public interface IUserService {
     Optional<User> getUserByEmail(String email);
     void deleteUserByEmail(String email);
     void updateProfilePicture(User user, MultipartFile profilePicture);
+    boolean isValidProfilePicture(MultipartFile multipartFile);
 }

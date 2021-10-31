@@ -1,7 +1,6 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.controller;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.image.ValidImage;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -24,7 +23,6 @@ public class ProfileController {
 
     private final IUserService userService;
 
-
     @GetMapping("/profile")
     public String getProfile(@CurrentSecurityContext(expression="authentication") Authentication authentication, Model model) {
         String email = authentication.getName();
@@ -34,16 +32,21 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/change-profile-picture")
-    public String changeProfilePicture(@RequestParam("profilePicture") @ValidImage MultipartFile profilePicture,
+    public String changeProfilePicture(@RequestParam("profilePicture") MultipartFile profilePicture,
                                        @CurrentSecurityContext(expression="authentication") Authentication authentication,
                                        RedirectAttributes redirectAttributes,
                                        Model model) {
+
         String email = authentication.getName();
         User user = userService.getUserByEmail(email).get();
-        userService.updateProfilePicture(user, profilePicture);
-
         model.addAttribute("session_user", user);
-        redirectAttributes.addFlashAttribute(PROFILE_PERSONAL_INFO_SUCCESS_MSG_NAME, PROFILE_INFO_UPDATED_INTO_MSG);
+
+        if (userService.isValidProfilePicture(profilePicture) == false) {
+            redirectAttributes.addFlashAttribute(PROFILE_ERROR_MSG_NAME, PROFILE_PICTURE_INVALID_FORMAT);
+        } else {
+            userService.updateProfilePicture(user, profilePicture);
+            redirectAttributes.addFlashAttribute(PROFILE_SUCCESS_MSG_NAME, PROFILE_PICTURE_UPDATED_INTO_MSG);
+        }
         return "redirect:/profile";
     }
 }

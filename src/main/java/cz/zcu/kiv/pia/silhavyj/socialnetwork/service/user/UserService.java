@@ -73,6 +73,14 @@ public class UserService implements UserDetailsService, IUserService {
         userRepository.save(user);
     }
 
+    @Override
+    public boolean isValidProfilePicture(MultipartFile multipartFile) {
+        if (multipartFile == null)
+            return false;
+        String contentType = multipartFile.getContentType();
+        return isSupportedContentType(contentType);
+    }
+
     private void saveProfilePicture(final String directory, final String filename, MultipartFile picture) {
         Path uploadPath = Paths.get(directory);
         try {
@@ -90,5 +98,11 @@ public class UserService implements UserDetailsService, IUserService {
         catch (IOException e) {
             logger.error(SAVING_PROFILE_PICTURE_FAILED_ERR_MSG, e.getMessage());
         }
+    }
+
+    private boolean isSupportedContentType(String contentType) {
+        return contentType.equals("image/png")
+                || contentType.equals("image/jpg")
+                || contentType.equals("image/jpeg");
     }
 }

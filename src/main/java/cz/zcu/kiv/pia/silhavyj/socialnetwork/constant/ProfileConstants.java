@@ -10,4 +10,5 @@ public class ProfileConstants {
     public static final String PASSWORD_UPDATED_SUCCESSFULLY_INFO_MSG = "Your password has been successfully updated";
     public static final String OLD_PASSWORD_DOES_NOT_MATCH_ERR_MSG = "Old password does not match up";
     public static final String PASSWORD_IS_NOT_SECURE_ENOUGH_ERR_MSG = "Password is not secure enough";
+    public static final String EXCEEDED_SIZE_OF_PROFILE_PICTURE = "The image you're trying to upload is too big";
 }

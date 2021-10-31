@@ -3,16 +3,24 @@ package cz.zcu.kiv.pia.silhavyj.socialnetwork.controller;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.exception.ResetPasswordException;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.exception.SignUpException;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.ProfileConstants.PROFILE_ERROR_MSG_NAME;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.ProfileConstants.*;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
 
 @ControllerAdvice
+@RequiredArgsConstructor
 public class ExceptionController {
+
+    private final IUserService userService;
 
     @ExceptionHandler(value = {ResetPasswordException.class})
     public String resetPasswordEmailNotFoundException(ResetPasswordException exception, Model model) {
@@ -28,8 +36,13 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public String handleFileSizeLimitExceeded(MaxUploadSizeExceededException exception, Model model) {
-        model.addAttribute(PROFILE_ERROR_MSG_NAME, "File's too big");
-        return "profile";
+    public String handleFileSizeLimitExceeded(@CurrentSecurityContext(expression="authentication") Authentication authentication,
+                                              RedirectAttributes redirectAttributes,
+                                              Model model) {
+        String email = authentication.getName();
+        User user = userService.getUserByEmail(email).get();
+        model.addAttribute("session_user", user);
+        redirectAttributes.addFlashAttribute(PROFILE_ERROR_MSG_NAME, EXCEEDED_SIZE_OF_PROFILE_PICTURE);
+        return "redirect:/profile";
     }
 }

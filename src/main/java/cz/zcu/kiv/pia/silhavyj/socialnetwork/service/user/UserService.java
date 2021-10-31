@@ -1,6 +1,7 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.password.SecurePasswordValidator;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ public class UserService implements UserDetailsService, IUserService {
 
     private final IUserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final SecurePasswordValidator securePasswordValidator;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -79,6 +81,23 @@ public class UserService implements UserDetailsService, IUserService {
             return false;
         String contentType = multipartFile.getContentType();
         return isSupportedContentType(contentType);
+    }
+
+    @Override
+    public boolean matchesUserPassword(User user, String oldPassword) {
+        return bCryptPasswordEncoder.matches(oldPassword, user.getPassword());
+    }
+
+    @Override
+    public void setUserPassword(User user, String newPassword) {
+        user.setPassword(newPassword);
+        encryptUserPassword(user);
+        userRepository.save(user);
+    }
+
+    @Override
+    public boolean isSecurePassword(String password) {
+        return securePasswordValidator.isValid(password, null);
     }
 
     private void saveProfilePicture(final String directory, final String filename, MultipartFile picture) {

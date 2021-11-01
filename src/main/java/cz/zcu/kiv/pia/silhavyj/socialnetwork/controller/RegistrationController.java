@@ -18,7 +18,6 @@ import javax.validation.constraints.Email;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
 
 @Controller
-@Validated
 @RequiredArgsConstructor
 public class RegistrationController {
 

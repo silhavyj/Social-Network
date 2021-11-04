@@ -14,14 +14,14 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
       <a class="navbar-brand" th:href="@{/}">Social Network</a>
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" th:href="@{/}">Home</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" th:href="@{/profile}">Profile</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/chat}">Chat</a>
+          <a class="nav-link" th:href="@{/friends}">friends</a>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
@@ -32,7 +32,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" th:href="@{/}">Home</a>
             <a class="dropdown-item" th:href="@{/profile}">Profile</a>
-            <a class="dropdown-item" th:href="@{/chat}">Chat</a>
+            <a class="dropdown-item" th:href="@{/friends}">friends</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" th:href="@{/logout}">Log out</a>
           </div>

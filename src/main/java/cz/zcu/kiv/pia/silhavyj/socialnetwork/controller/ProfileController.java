@@ -14,6 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import java.util.Set;
+
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.ProfileConstants.*;
 
 @Controller
@@ -70,6 +77,31 @@ public class ProfileController {
             }
         } else {
             redirectAttributes.addFlashAttribute(PROFILE_ERROR_MSG_NAME, OLD_PASSWORD_DOES_NOT_MATCH_ERR_MSG);
+        }
+        return "redirect:/profile";
+    }
+
+    @PostMapping("/profile/update-info")
+    public String updatePersonalInfo(User user,
+                                     @CurrentSecurityContext(expression="authentication") Authentication authentication,
+                                     RedirectAttributes redirectAttributes,
+                                     Model model) {
+
+        String email = authentication.getName();
+        User sessionUser = userService.getUserByEmail(email).get();
+
+        userService.updatePersonalInfo(user, sessionUser);
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+
+        model.addAttribute("session_user", user);
+
+        if (!violations.isEmpty()) {
+            redirectAttributes.addFlashAttribute(PROFILE_ERROR_MSG_NAME, violations.stream().findFirst().get().getMessage());
+        } else {
+            userService.saveUser(user);
+            redirectAttributes.addFlashAttribute(PROFILE_SUCCESS_MSG_NAME, PROFILE_INFO_UPDATED_INFO_MSG);
         }
         return "redirect:/profile";
     }

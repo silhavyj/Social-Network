@@ -16,4 +16,5 @@ public interface IUserService {
     boolean matchesUserPassword(User user, String oldPassword);
     void setUserPassword(User user, String newPassword);
     boolean isSecurePassword(String password);
+    void updatePersonalInfo(User newUser, User oldUser);
 }

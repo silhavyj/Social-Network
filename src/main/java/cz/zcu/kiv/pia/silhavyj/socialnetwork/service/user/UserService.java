@@ -100,6 +100,15 @@ public class UserService implements UserDetailsService, IUserService {
         return securePasswordValidator.isValid(password, null);
     }
 
+    @Override
+    public void updatePersonalInfo(User newUser, User oldUser) {
+        newUser.setPassword(oldUser.getPassword());
+        newUser.setId(oldUser.getId());
+        newUser.setEnabled(true);
+        newUser.setEmail(oldUser.getEmail());
+        newUser.setProfilePicturePath(oldUser.getProfilePicturePath());
+    }
+
     private void saveProfilePicture(final String directory, final String filename, MultipartFile picture) {
         Path uploadPath = Paths.get(directory);
         try {

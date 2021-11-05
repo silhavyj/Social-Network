@@ -39,6 +39,7 @@ spring:
 application:
   url:  http://localhost:8080
   senderemail: socialnetwork@silhavyj.pia.kiv.zcu.cz     # email address of the sender
+  searchnameminlen: 3                                    # at least 3 letters must be provided when search a person
 
   users:                                                 # default users that will be added to the database
     -                                                    # automatically when the application starts
@@ -56,4 +57,12 @@ application:
       password: User2-123*
       email: user2@silhavyj.pia.kiv.zcu.cz
       dob: "1998-04-09"
+      role: USER
+
+    -
+      firstname: user3
+      lastname: user3
+      password: User3-123*
+      email: user3@silhavyj.pia.kiv.zcu.cz
+      dob: "1994-04-10"
       role: USER

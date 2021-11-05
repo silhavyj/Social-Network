@@ -21,6 +21,7 @@ public class AppConfiguration {
     // https://www.baeldung.com/spring-boot-yaml-list
 
     private String senderEmail;
+    private int searchNameMinLen;
     private String url;
     private List<DefaultUserConfig> users;
     private IpBanConfig ipBanConfig;

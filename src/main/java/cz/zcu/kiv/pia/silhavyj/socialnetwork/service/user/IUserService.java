@@ -3,6 +3,7 @@ package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IUserService {
@@ -17,4 +18,5 @@ public interface IUserService {
     void setUserPassword(User user, String newPassword);
     boolean isSecurePassword(String password);
     void updatePersonalInfo(User newUser, User oldUser);
+    List<User> searchUsers(String name, String sessionUserEmail);
 }

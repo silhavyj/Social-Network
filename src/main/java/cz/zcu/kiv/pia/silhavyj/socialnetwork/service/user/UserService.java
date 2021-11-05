@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
 
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
@@ -107,6 +108,11 @@ public class UserService implements UserDetailsService, IUserService {
         newUser.setEnabled(true);
         newUser.setEmail(oldUser.getEmail());
         newUser.setProfilePicturePath(oldUser.getProfilePicturePath());
+    }
+
+    @Override
+    public List<User> searchUsers(String name, String sessionUserEmail) {
+        return userRepository.searchUsers(name, sessionUserEmail);
     }
 
     private void saveProfilePicture(final String directory, final String filename, MultipartFile picture) {

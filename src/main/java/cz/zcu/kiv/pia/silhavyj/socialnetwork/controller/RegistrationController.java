@@ -1,8 +1,10 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.controller;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.password.SecurePasswordValidator;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.registration.IRegistrationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,7 @@ import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstan
 public class RegistrationController {
 
     private final IRegistrationService registrationService;
+    private final SecurePasswordValidator securePasswordValidator;
 
     @GetMapping("/sign-in")
     public String signIn() {
@@ -71,5 +74,10 @@ public class RegistrationController {
         registrationService.changeUserPassword(token);
         model.addAttribute(SIGN_IN_FORM_SUCCESS_MSG_NAME, PASSWORD_HAS_BEEN_RESET_INFO_MSG);
         return "sign-in";
+    }
+
+    @GetMapping("/password-entropy")
+    public ResponseEntity<?> getPasswordEntropy(@RequestParam String password) {
+        return ResponseEntity.ok(securePasswordValidator.calculatePasswordEntropy(password));
     }
 }

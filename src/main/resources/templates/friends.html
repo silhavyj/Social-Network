@@ -46,12 +46,7 @@
     </nav>
 
     <div class="container mt-3">
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Error: </strong>
-            <span>At least 3 letters must be provided!</span>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+        <div id="friends-msg-container">
         </div>
         <div class="d-flex flex-row-reverse">
             <form class="form-inline my-2 my-lg-0">
@@ -73,6 +68,58 @@
                 <tbody id="searched_users">
                 </tbody>
             </table>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-6">
+                <div class="container">
+                    <table class="table">
+                        <thead>
+                        <tr class="bg-info">
+                            <th style="color: white;" scope="col" colspan="5">
+                                <span>Pending requests</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="pending-requests-table">
+                            <tr th:each="pending_friend : ${sent_pending_requests}">
+                                <td><img th:src="${pending_friend.profilePicturePath}" class="img-thumbnail" style="width: 20%;"/></td>
+                                <td class="align-middle"><h5><span class="badge badge-light" th:text='${pending_friend.firstname + " " + pending_friend.lastname}'></span></h5></td>
+                                <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger">Cancel</button></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr th:each="pending_friend : ${receiver_pending_requests}">
+                                <td><img th:src="${pending_friend.profilePicturePath}" class="img-thumbnail" style="width: 50%;"/></td>
+                                <td class="align-middle"><h5><span class="badge badge-light" th:text='${pending_friend.firstname + " " + pending_friend.lastname}'></span></h5></td>
+                                <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-success">Accept</button></td>
+                                <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger">Reject</button></td>
+                                <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger">Block</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="container">
+                    <table class="table">
+                        <thead>
+                        <tr class="bg-success">
+                            <th style="color: white;" scope="col" colspan="3">
+                                <span>Friend list</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody >
+                        <tr>
+                            <td><img src="images/default_user_picture.png" class="img-thumbnail" style="width: 20%;"/></td>
+                            <td class="align-middle"><h5><span class="badge badge-light">Kuba Silhavy</span></h5></td>
+                            <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger">Delete</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 

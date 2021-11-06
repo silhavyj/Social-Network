@@ -1,6 +1,8 @@
 async function searchUsers(event) {
     event.preventDefault();
     let name = $('#searched_name').val();
+    if (name == "")
+        name = "1";
     $.ajax({
         type: "GET",
         url: "/friends/search-all/" + name,
@@ -8,6 +10,7 @@ async function searchUsers(event) {
             $('#friends-msg-container').html('');
             $('#searched_users').html('');
             if (response.status != 200) {
+                console.log(response);
                 $('#friends-msg-container').html(createErrorMessage(response.responseText));
                 return;
             }
@@ -30,15 +33,6 @@ function createErrorMessage(message) {
         '</div>';
 }
 
-function createSuccessMessage(message) {
-    return '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
-        '   <span>' + message + ' </span>\n' +
-        '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
-        '   <span aria-hidden="true">&times;</span>\n' +
-        '   </button>\n' +
-        '</div>';
-}
-
 function createARecordInSearchResultsTable(user) {
     let row = '<tr>' +
     '   <td><img src="' + user['profilePicturePath'] + '" class="img-thumbnail" style="width: 30%;"/></td>\n' +
@@ -48,7 +42,7 @@ function createARecordInSearchResultsTable(user) {
     if (user['alreadyFriends'] === true) {
         row += '<td class="align-middle"><p class="text-large">Request pending...</p></td>';
     } else {
-        row += '<td class="align-middle"><button class="btn btn-small btn-success" onclick="sendFriendRequest(this, ' + "'" + user['email'] + "'" + ')">Send friend request</button>';
+        row += '<td class="align-middle"><button class="btn btn-small btn-success" onclick="sendFriendRequest(this,' + "'" + user['email'] + "'" + ')">Send friend request</button>';
     }
     row += '</tr>';
     return row;
@@ -64,22 +58,37 @@ function sendFriendRequest(tdObject, email) {
                 $('#friends-msg-container').html(createErrorMessage(response.responseText));
                 return;
             }
-            $('#friends-msg-container').html(createSuccessMessage(response.responseText));
-
-            let p = document.createElement('p');
-            p.classList.add('text-large');
-            p.innerHTML = 'Request pending...';
-
-            let td = document.createElement('td');
-            td.classList.add('align-middle');
-            td.appendChild(p);
-
-            tdObject.parentNode.appendChild(td);
-            tdObject.parentNode.removeChild(tdObject);
+            location.reload()
         }
     });
 }
 
-function addPendingRequestRecordsInTable() {
-    //pending-requests-table
+async function cancelFriendRequest(email) {
+    $.ajax({
+        type: "DELETE",
+        url: "/friends/delete-friend/" + email,
+        complete: function() {
+            location.reload()
+        }
+    });
+}
+
+async function acceptFriendRequest(email) {
+    $.ajax({
+        type: "PUT",
+        url: "/friends/accept-friend-request/" + email,
+        complete: function() {
+            location.reload()
+        }
+    });
+}
+
+async function blockUser(email) {
+    $.ajax({
+        type: "PUT",
+        url: "/friends/block-friend/" + email,
+        complete: function() {
+            location.reload()
+        }
+    });
 }

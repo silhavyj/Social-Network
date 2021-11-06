@@ -17,4 +17,5 @@ public interface IFriendshipService {
     List<SearchedUser> getAllSearchedUser(String name, String sessionUserEmail);
     void sendFriendRequest(User receiver, User sender);
     void acceptFriendRequest(User receiver, User sender);
+    void deleteFriend(User sessionUser, User user);
 }

@@ -9,7 +9,6 @@ import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -84,6 +83,12 @@ public class FriendshipService implements IFriendshipService {
         Optional<FriendRequest> friendRequest = friendRequestRepository.findPendingFriendRequest(receiver.getEmail(), sender.getEmail());
         friendRequest.get().setStatus(ACCEPTED);
         friendRequestRepository.save(friendRequest.get());
+    }
+
+    @Override
+    public void deleteFriend(User sessionUser, User user) {
+        Optional<FriendRequest> friendRequest = friendRequestRepository.findFriendRequest(sessionUser.getEmail(), user.getEmail());
+        friendRequestRepository.delete(friendRequest.get());
     }
 
     private boolean isOnFriendList(List<User> friends, String potentialFriendEmail) {

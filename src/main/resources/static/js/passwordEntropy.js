@@ -1,4 +1,4 @@
-function isGood(password, inputElementId) {
+function entropy(password, inputElementId) {
     let password_strength = document.getElementById(inputElementId);
     if (password.length == 0) {
         password_strength.innerHTML = "";

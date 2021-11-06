@@ -41,8 +41,8 @@
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" onkeyup="isGood(this.value, 'password-text')" class="form-control" id="password" name="password" placeholder="Password" th:field="*{password}">
-                    <small class="help-block" id="password-text"></small>
+                    <input type="password" onkeyup="entropy(this.value, 'password-entropy-bar')" class="form-control" id="password" name="password" placeholder="Password" th:field="*{password}">
+                    <small class="help-block" id="password-entropy-bar"></small>
                 </div>
                 <div class="form-group">
                     <label>Date of birth</label>

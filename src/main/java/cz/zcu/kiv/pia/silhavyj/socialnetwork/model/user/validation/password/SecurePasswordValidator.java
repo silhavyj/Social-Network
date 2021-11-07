@@ -63,6 +63,6 @@ public class SecurePasswordValidator implements ConstraintValidator<SecurePasswo
     @Override
     public boolean isValid(String password, ConstraintValidatorContext constraintValidatorContext) {
         long passwordEntropy = calculatePasswordEntropy(password);
-        return getPasswordEntropyClass(passwordEntropy).ordinal() >= STRONG.ordinal();
+        return getPasswordEntropyClass(passwordEntropy).ordinal() >= REASONABLE.ordinal();
     }
 }

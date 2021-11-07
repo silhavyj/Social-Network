@@ -1,11 +1,11 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.registration;
 
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.config.AppConfiguration;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.exception.ResetPasswordException;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.exception.SignUpException;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.Token;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.email.IEmailSenderHelper;
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.passwordgen.IPasswordGenerator;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.token.ITokenService;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,8 @@ public class RegistrationService implements IRegistrationService {
 
     private final IUserService userService;
     private final ITokenService tokenService;
-    private final IPasswordGenerator randomPasswordGenerator;
     private final IEmailSenderHelper emailSenderHelper;
+    private final AppConfiguration appConfiguration;
 
     @Override
     public void sendTokenForResettingPassword(String email) {
@@ -42,7 +42,7 @@ public class RegistrationService implements IRegistrationService {
                 throw new ResetPasswordException(String.format(RESET_PASSWORD_TOKEN_ALREADY_ISSUED_ERR_MSG, remainingSecond));
             }
         }
-        Token token = new Token(user, RESET_PASSWORD_TOKEN_MIN_VALIDATION, RESET_PASSWORD);
+        Token token = new Token(user, appConfiguration.getResetPasswordExpirationTime(), RESET_PASSWORD);
         tokenService.saveToken(token);
         emailSenderHelper.sendPasswordResetConfirmationEmail(user, token.getValue());
     }
@@ -67,7 +67,7 @@ public class RegistrationService implements IRegistrationService {
         userService.encryptUserPassword(user);
         userService.saveUser(user);
 
-        final Token token = new Token(user, REGISTRATION_TOKEN_MIN_VALIDATION, REGISTRATION);
+        final Token token = new Token(user, REGISTRATION);
         tokenService.saveToken(token);
         emailSenderHelper.sendSingUpConfirmationEmail(user, token.getValue());
     }
@@ -84,21 +84,5 @@ public class RegistrationService implements IRegistrationService {
 
         tokenService.deleteToken(token);
         emailSenderHelper.sendThankYouForRegisteringEmail(user);
-    }
-
-    @Override
-    public void changeUserPassword(String tokenValue) {
-        Token token = tokenService
-                .getResetPasswordTokenByTokenValue(tokenValue)
-                .orElseThrow(() -> new SignUpException(INVALID_RESET_PASSWORD_TOKEN));
-
-        User user = token.getUser();
-        String newPassword = randomPasswordGenerator.generatePassword();
-        user.setPassword(newPassword);
-        userService.encryptUserPassword(user);
-        userService.saveUser(user);
-
-        tokenService.deleteToken(token);
-        emailSenderHelper.sendNewPasswordToUser(user, newPassword);
     }
 }

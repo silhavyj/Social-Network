@@ -63,21 +63,6 @@ public class EmailSenderHelper implements IEmailSenderHelper {
         emailSender.sendEmail(user.getEmail(), subject, html, true);
     }
 
-    @Override
-    public void sendNewPasswordToUser(User user, String password) {
-        String subject = "New password";
-
-        Map<String, Object> variables = Stream.of(new String[][] {
-                { "firstname", user.getFirstname() },
-                { "password", password }
-        }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
-
-        Context context = new Context();
-        context.setVariables(variables);
-        String html = templateEngine.process("email/new-password", context);
-        emailSender.sendEmail(user.getEmail(), subject, html, true);
-    }
-
     private String createLink(String token, String path) {
         return new StringBuilder()
                 .append(appConfiguration.getUrl())

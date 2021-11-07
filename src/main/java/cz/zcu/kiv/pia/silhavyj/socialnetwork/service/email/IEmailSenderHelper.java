@@ -7,5 +7,4 @@ public interface IEmailSenderHelper {
     void sendSingUpConfirmationEmail(User user, String token);
     void sendThankYouForRegisteringEmail(User user);
     void sendPasswordResetConfirmationEmail(User user, String token);
-    void sendNewPasswordToUser(User user, String password);
 }

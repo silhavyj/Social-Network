@@ -26,6 +26,7 @@ public class AppConfiguration {
     private List<DefaultUserConfig> users;
     private IpBanConfig ipBanConfig;
     private List<String> bannedIp;
+    private int resetPasswordExpirationTime;
 
     @Getter
     @Setter

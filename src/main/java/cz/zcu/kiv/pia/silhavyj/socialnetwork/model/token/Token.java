@@ -21,6 +21,8 @@ public class Token {
 
     private String value;
 
+    private Boolean expirable = false;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime expiresAt;
@@ -32,11 +34,20 @@ public class Token {
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;
 
+    public Token(User user, TokenType type) {
+        this(user, null, type, false);
+    }
+
     public Token(User user, int minutesValidFor, TokenType type) {
+        this(user, LocalDateTime.now().plusMinutes(minutesValidFor), type, true);
+    }
+
+    public Token(User user, LocalDateTime expiresAt, TokenType type, Boolean expirable) {
         this.user = user;
         this.value = UUID.randomUUID().toString();
         this.createdAt = LocalDateTime.now();
-        this.expiresAt = createdAt.plusMinutes(minutesValidFor);
+        this.expiresAt = expiresAt;
         this.tokenType = type;
+        this.expirable = expirable;
     }
 }

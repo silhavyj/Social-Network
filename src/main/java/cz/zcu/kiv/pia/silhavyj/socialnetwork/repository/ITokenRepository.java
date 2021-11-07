@@ -21,4 +21,6 @@ public interface ITokenRepository extends JpaRepository<Token, Long> {
 
     @Query("SELECT token from Token token WHERE token.value = ?1 AND token.tokenType = cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.TokenType.RESET_PASSWORD")
     Optional<Token> findResetPasswordTokenByValue(String value);
+
+    void deleteByValue(String value);
 }

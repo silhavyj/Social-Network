@@ -23,6 +23,7 @@ public class RegistrationConstants {
     public static final String LOCKED_ACCOUNT_FLAG = "locked";
 
     public static final String ACCOUNT_HAS_BEEN_ACTIVATED_INFO_MSG = "Your account has been successfully activated";
+    public static final String ACCOUNT_HAS_NOT_BEEN_ACTIVATED_ERR_MSG = "Account has not been activated";
 
     public static final String CONFIRM_CHANGE_PASSWORD_INFO_MSG = "Please confirm your intention to change the password through e-mail";
     public static final String CONFIRM_EMAIL_ADDRESS_INFO_MSG = "Please confirm your e-mail address to finish the registration";

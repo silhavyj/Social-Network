@@ -42,6 +42,9 @@ public class RegistrationService implements IRegistrationService {
                 throw new ResetPasswordException(String.format(RESET_PASSWORD_TOKEN_ALREADY_ISSUED_ERR_MSG, remainingSecond));
             }
         }
+        if (user.isEnabled() == false)
+            throw new ResetPasswordException(ACCOUNT_HAS_NOT_BEEN_ACTIVATED_ERR_MSG);
+
         Token token = new Token(user, appConfiguration.getResetPasswordExpirationTime(), RESET_PASSWORD);
         tokenService.saveToken(token);
         emailSenderHelper.sendPasswordResetConfirmationEmail(user, token.getValue());
@@ -49,17 +52,6 @@ public class RegistrationService implements IRegistrationService {
 
     @Override
     public void signUpUser(User user) {
-        Optional<Token> previousToken = tokenService.getRegistrationTokenByUserEmail(user.getEmail());
-        if (previousToken.isPresent()) {
-            if (previousToken.get().getExpiresAt().isBefore(now())) {
-                tokenService.deleteToken(previousToken.get());
-                userService.deleteUserByEmail(user.getEmail());
-            } else {
-                long remainingSecond = SECONDS.between(now(), previousToken.get().getExpiresAt());
-                throw new SignUpException(String.format(REGISTRATION_TOKEN_ALREADY_ISSUED_ERR_MSG, remainingSecond));
-            }
-        }
-
         userService.getUserByEmail(user.getEmail()).ifPresent(userWithTheSameEmail -> {
             throw new SignUpException(String.format(EMAIL_ALREADY_TAKEN_ERR_MSG));
         });

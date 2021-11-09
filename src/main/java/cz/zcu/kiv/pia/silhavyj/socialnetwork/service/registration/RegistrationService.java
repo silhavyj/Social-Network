@@ -7,6 +7,7 @@ import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.Token;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.email.IEmailSenderHelper;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.token.ITokenService;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IRoleService;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.TokenType.REGISTRATION;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.token.TokenType.RESET_PASSWORD;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole.USER;
 import static java.time.LocalDateTime.now;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
@@ -25,6 +27,7 @@ public class RegistrationService implements IRegistrationService {
 
     private final IUserService userService;
     private final ITokenService tokenService;
+    private final IRoleService roleService;
     private final IEmailSenderHelper emailSenderHelper;
     private final AppConfiguration appConfiguration;
 
@@ -56,6 +59,8 @@ public class RegistrationService implements IRegistrationService {
             throw new SignUpException(String.format(EMAIL_ALREADY_TAKEN_ERR_MSG));
         });
 
+        user.getRoles().clear();
+        user.getRoles().add(roleService.getRoleByUserRole(USER).get());
         userService.encryptUserPassword(user);
         userService.saveUser(user);
 

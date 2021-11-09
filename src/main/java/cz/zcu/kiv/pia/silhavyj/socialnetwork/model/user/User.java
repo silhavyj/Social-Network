@@ -14,11 +14,9 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.UserConstants.*;
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole.USER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -56,10 +54,6 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Enumerated(EnumType.STRING)
-    private UserRole userRole = USER;
-
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -72,13 +66,21 @@ public class User implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Boolean enabled = false;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles = new HashSet<>();
+
     private String profilePicturePath = DEFAULT_PROFILE_IMAGE_PATH;
 
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        final SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_" + userRole.name());
-        return Collections.singletonList(simpleGrantedAuthority);
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        for (var role : roles)
+            authorities.add(new SimpleGrantedAuthority(("ROLE_" + role.getUserRole().name())));
+        return authorities;
     }
 
     @Override

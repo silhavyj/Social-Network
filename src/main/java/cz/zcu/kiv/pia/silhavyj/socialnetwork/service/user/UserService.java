@@ -64,11 +64,6 @@ public class UserService implements UserDetailsService, IUserService {
     }
 
     @Override
-    public void deleteUserByEmail(String email) {
-        userRepository.deleteByEmail(email);
-    }
-
-    @Override
     public void updateProfilePicture(User user, MultipartFile profilePicture) {
         String fileName = StringUtils.cleanPath(profilePicture.getOriginalFilename());
         saveProfilePicture(PROFILE_IMAGES_DIRECTORY + "/", fileName, profilePicture);

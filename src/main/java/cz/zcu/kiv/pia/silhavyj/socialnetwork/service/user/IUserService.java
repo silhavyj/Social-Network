@@ -11,7 +11,6 @@ public interface IUserService {
     void encryptUserPassword(User user);
     void saveUser(User user);
     Optional<User> getUserByEmail(String email);
-    void deleteUserByEmail(String email);
     void updateProfilePicture(User user, MultipartFile profilePicture);
     boolean isValidProfilePicture(MultipartFile multipartFile);
     boolean matchesUserPassword(User user, String oldPassword);

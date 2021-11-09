@@ -67,3 +67,10 @@ application:
       email: user3@silhavyj.pia.kiv.zcu.cz
       dob: "1994-04-10"
       role: USER
+
+    - firstname: admin
+      lastname: admin
+      password: Admin123*
+      email: admin@silhavyj.pia.kiv.zcu.cz
+      dob: "1994-04-15"
+      role: ADMIN

@@ -2,14 +2,12 @@ package cz.zcu.kiv.pia.silhavyj.socialnetwork.config;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.Gender;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole;
 import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.Gender.UNDEFINED;
 
@@ -59,13 +57,6 @@ public class AppConfiguration {
             user.setDob(LocalDate.parse(dob));
 
             user.setEnabled(true);
-
-            UserRole userRole = Stream.of(UserRole.values())
-                    .filter(name -> name.name().equals(role))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Invalid use role in application.yml"));
-
-            user.setUserRole(userRole);
             return user;
         }
     }

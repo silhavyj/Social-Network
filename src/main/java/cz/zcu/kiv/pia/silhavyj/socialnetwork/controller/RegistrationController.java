@@ -86,7 +86,7 @@ public class RegistrationController {
         return "create-new-password";
     }
 
-    @PostMapping("/reset-password/new/{token}")
+    @PostMapping("/reset-password/{token}")
     public String resetPassword(@PathVariable String token, @RequestParam String password1, @RequestParam String password2, Model model) {
         Optional<User> user = tokenService.getGetUserByResetPasswordTokenValue(token);
         if (user.isEmpty()) {

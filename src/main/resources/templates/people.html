@@ -120,6 +120,28 @@
                     </table>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="container">
+                        <table class="table">
+                            <thead>
+                            <tr class="bg-danger">
+                                <th style="color: white;" scope="col" colspan="3">
+                                    <span>Blocked users</span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody >
+                            <tr th:each="friend : ${blocked_friends}">
+                                <td><img th:src="${friend.profilePicturePath}" class="img-thumbnail" style="width: 20%;"/></td>
+                                <td class="align-middle"><h5><span class="badge badge-light" th:text='${friend.firstname + " " + friend.lastname}'></span></h5></td>
+                                <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|cancelFriendRequest('${friend.email}')|" >Delete</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

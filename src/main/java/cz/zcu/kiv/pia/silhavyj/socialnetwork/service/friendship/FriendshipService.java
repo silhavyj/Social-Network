@@ -31,6 +31,7 @@ public class FriendshipService implements IFriendshipService {
 
         return allPeople.stream()
                 .filter(user -> isOnFriendList(acceptedFriends, user.getEmail()) == false)
+                .filter(user -> isFriendshipBlocked(sessionUser.getEmail(), user.getEmail()) == false)
                 .map(user -> new SearchedUser(user, isOnFriendList(pendingFriends, user.getEmail()) ? PENDING : NOT_FRIENDS_YET))
                 .collect(Collectors.toList());
     }
@@ -109,6 +110,12 @@ public class FriendshipService implements IFriendshipService {
     @Override
     public Optional<FriendRequest> getFriendRequestToBlock(String senderEmail, User receiver) {
         return friendRequestRepository.findPendingRequestToBeBlocked(senderEmail, receiver.getEmail());
+    }
+
+    @Override
+    public boolean isFriendshipBlocked(String senderEmail, String receiverEmail) {
+        return friendRequestRepository.findBlockedRequest(senderEmail, receiverEmail).isPresent() ||
+               friendRequestRepository.findBlockedRequest(receiverEmail, senderEmail).isPresent();
     }
 
     private List<SearchedUser> mapFriendRequestsOntoSearchedUsers(List<FriendRequest> friendRequests, String sessionUserEmail) {

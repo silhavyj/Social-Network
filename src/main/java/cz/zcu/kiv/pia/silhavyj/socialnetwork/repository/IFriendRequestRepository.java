@@ -33,4 +33,7 @@ public interface IFriendRequestRepository extends JpaRepository<FriendRequest, L
 
     @Query("SELECT rqst from FriendRequest rqst WHERE rqst.requestSender.email = ?1 AND rqst.requestReceiver.email = ?2 AND rqst.status = cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequestStatus.PENDING")
     Optional<FriendRequest> findPendingRequestToBeBlocked(String senderEmail, String receiverEmail);
+
+    @Query("SELECT rqst from FriendRequest rqst WHERE rqst.requestSender.email = ?1 AND rqst.requestReceiver.email = ?2 AND rqst.status = cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequestStatus.BLOCKED")
+    Optional<FriendRequest> findBlockedRequest(String senderEmail, String receiverEmail);
 }

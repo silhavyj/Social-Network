@@ -60,6 +60,9 @@ public class FriendshipController {
         if (receiver.isEmpty())
             return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
 
+        if (friendshipService.isFriendshipBlocked(email, sessionUser.getEmail()))
+            return ResponseEntity.badRequest().body(USER_IS_BLOCKED_ERR_MSG);
+
         if (friendshipService.isAlreadyFriendOrPendingFriend(email, sessionUser))
             return ResponseEntity.badRequest().body(FRIEND_REQUEST_ALREADY_SENT);
 
@@ -119,6 +122,26 @@ public class FriendshipController {
             return ResponseEntity.badRequest().body(NO_PENDING_REQUEST_TO_BE_BLOCKED_FOUND_ERR_MSG);
 
         friendshipService.blockUser(friendRequest.get());
-        return ResponseEntity.ok("User has been successfully blocked");
+        return ResponseEntity.ok(USER_SUCCESSFULLY_BLOCKED_INFO_MSG);
+    }
+
+    @DeleteMapping("friends/blocked/{email}")
+    public ResponseEntity<?> unblockUser(@CurrentSecurityContext(expression="authentication") Authentication authentication,
+                                       @PathVariable ("email") String email) {
+
+        // TODO
+        /*String sessionUserEmail = authentication.getName();
+        User sessionUser = userService.getUserByEmail(sessionUserEmail).get();
+        Optional<User> sender = userService.getUserByEmail(email);
+
+        if (sender.isEmpty())
+            return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
+
+        Optional<FriendRequest> friendRequest = friendshipService.getFriendRequestToBlock(email, sessionUser);
+        if (friendRequest.isEmpty())
+            return ResponseEntity.badRequest().body(NO_PENDING_REQUEST_TO_BE_BLOCKED_FOUND_ERR_MSG);
+
+        friendshipService.blockUser(friendRequest.get());*/
+        return ResponseEntity.ok("");
     }
 }

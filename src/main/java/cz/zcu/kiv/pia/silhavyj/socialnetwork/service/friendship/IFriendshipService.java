@@ -23,4 +23,5 @@ public interface IFriendshipService {
     void deleteFriend(User sessionUser, User user);
     void blockUser(FriendRequest friendRequest);
     Optional<FriendRequest> getFriendRequestToBlock(String senderEmail, User receiver);
+    boolean isFriendshipBlocked(String senderEmail, String receiverEmail);
 }

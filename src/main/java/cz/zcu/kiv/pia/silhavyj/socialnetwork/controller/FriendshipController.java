@@ -1,6 +1,7 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.controller;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.config.AppConfiguration;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequest;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.friendship.IFriendshipService;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
@@ -24,29 +25,32 @@ public class FriendshipController {
     private final IFriendshipService friendshipService;
     private final AppConfiguration appConfiguration;
 
-    @GetMapping("/friends")
+    @GetMapping("/people")
     public String getFriendshipManagementPage(@CurrentSecurityContext(expression="authentication") Authentication authentication, Model model) {
         String email = authentication.getName();
-        User user = userService.getUserByEmail(email).get();
-        model.addAttribute("session_user", user);
-        model.addAttribute("receiver_pending_requests", friendshipService.getAllUsersReceivedPendingFriends(email));
-        model.addAttribute("sent_pending_requests", friendshipService.getAllUsersSentPendingFriends(email));
-        model.addAttribute("friends", friendshipService.getAllUsersFriends(email));
-        return "friends";
+        User sessionUser = userService.getUserByEmail(email).get();
+        model.addAttribute("session_user", sessionUser);
+
+        model.addAttribute("received_pending_requests", friendshipService.getAllReceivedPendingFriends(sessionUser));
+        model.addAttribute("sent_pending_requests", friendshipService.getAllSentPendingFriends(sessionUser));
+        model.addAttribute("accepted_friends", friendshipService.getAllAcceptedFriends(sessionUser));
+        model.addAttribute("blocked_friends", friendshipService.getAllBlockedFriends(sessionUser));
+        return "people";
     }
 
-    @GetMapping("/friends/search-all/{name}")
+    @GetMapping("/people/{name}")
     public ResponseEntity<?> searchAllUsers(@CurrentSecurityContext(expression="authentication") Authentication authentication,
-                                            @PathVariable ("name") String name) {
+                                            @PathVariable("name") String name) {
         if (name == null || name.length() < appConfiguration.getSearchNameMinLen())
             return ResponseEntity.badRequest().body(TOO_SHORT_NAME_TO_SEARCH_ERR_MSG);
 
         String email = authentication.getName();
-        var users = friendshipService.getAllSearchedUser(name, email);
+        User sessionUser = userService.getUserByEmail(email).get();
+        var users = friendshipService.getAllPeople(name, sessionUser);
         return ResponseEntity.ok().body(users);
     }
 
-    @PostMapping("/friends/add-friend/{email}")
+    @PostMapping("/friends/{email}")
     public ResponseEntity<?> sendFriendRequest(@CurrentSecurityContext(expression="authentication") Authentication authentication,
                                                @PathVariable ("email") String email) {
         String sessionUserEmail = authentication.getName();
@@ -56,14 +60,14 @@ public class FriendshipController {
         if (receiver.isEmpty())
             return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
 
-        if (friendshipService.isAlreadyFriendOrPendingFriend(email, sessionUserEmail))
+        if (friendshipService.isAlreadyFriendOrPendingFriend(email, sessionUser))
             return ResponseEntity.badRequest().body(FRIEND_REQUEST_ALREADY_SENT);
 
         friendshipService.sendFriendRequest(receiver.get(), sessionUser);
         return ResponseEntity.ok(FRIEND_REQUEST_SENT_SUCCESSFULLY_INFO_MSG);
     }
 
-    @PutMapping("/friends/accept-friend-request/{email}")
+    @PutMapping("/friends/{email}")
     public ResponseEntity<?> acceptPendingFriendRequest(@CurrentSecurityContext(expression="authentication") Authentication authentication,
                                                         @PathVariable ("email") String email) {
         String sessionUserEmail = authentication.getName();
@@ -73,17 +77,17 @@ public class FriendshipController {
         if (sender.isEmpty())
             return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
 
-        if (friendshipService.isFriend(email, sessionUserEmail) == true)
-            return ResponseEntity.badRequest().body("You are already friends with this person");
+        if (friendshipService.isFriend(email, sessionUser) == true)
+            return ResponseEntity.badRequest().body(FRIEND_REQUEST_ALREADY_SENT_ERR_MSG);
 
-        if (friendshipService.isPendingFriend(email, sessionUserEmail) == false)
-            return ResponseEntity.badRequest().body("There is not any friend request to be accepted");
+        if (friendshipService.isPendingFriend(email, sessionUser) == false)
+            return ResponseEntity.badRequest().body(PENDING_FRIEND_REQUEST_NOT_FOUND_ERR_MSG);
 
         friendshipService.acceptFriendRequest(sessionUser, sender.get());
-        return ResponseEntity.ok("Friend request has been successfully accepted");
+        return ResponseEntity.ok(FRIEND_REQUEST_ACCEPTED_INFO_MSG);
     }
 
-    @DeleteMapping("/friends/delete-friend/{email}")
+    @DeleteMapping("/friends/{email}")
     public ResponseEntity<?> deleteFriend(@CurrentSecurityContext(expression="authentication") Authentication authentication,
                                           @PathVariable ("email") String email) {
         String sessionUserEmail = authentication.getName();
@@ -93,29 +97,28 @@ public class FriendshipController {
         if (sender.isEmpty())
             return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
 
-        if (friendshipService.isAlreadyFriendOrPendingFriend(email, sessionUserEmail) == false)
-            return ResponseEntity.badRequest().body("There is no friend request to be canceled nor a friend to be deleted");
+        if (friendshipService.isAlreadyFriendOrPendingFriend(email, sessionUser) == false)
+            return ResponseEntity.badRequest().body(NO_REQUEST_TO_BE_DELETED_FOUND_ERR_MSG);
 
         friendshipService.deleteFriend(sessionUser, sender.get());
-        return ResponseEntity.ok("Friend has been successfully deleted");
+        return ResponseEntity.ok(FRIEND_SUCCESSFULLY_DELETER_INFO_MSG);
     }
 
-    @PutMapping("/friends/block-friend/{email}")
+    @PutMapping("/friends/blocked/{email}")
     public ResponseEntity<?> blockUser(@CurrentSecurityContext(expression="authentication") Authentication authentication,
                                        @PathVariable ("email") String email) {
-        /*String sessionUserEmail = authentication.getName();
+        String sessionUserEmail = authentication.getName();
         User sessionUser = userService.getUserByEmail(sessionUserEmail).get();
         Optional<User> sender = userService.getUserByEmail(email);
 
         if (sender.isEmpty())
             return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
 
-        if (friendshipService.isAlreadyFriendOrPendingFriend(email, sessionUserEmail) == false)
-            return ResponseEntity.badRequest().body("There is no friend request to use to block the person");
+        Optional<FriendRequest> friendRequest = friendshipService.getFriendRequestToBlock(email, sessionUser);
+        if (friendRequest.isEmpty())
+            return ResponseEntity.badRequest().body(NO_PENDING_REQUEST_TO_BE_BLOCKED_FOUND_ERR_MSG);
 
-        friendshipService.blockUser(sessionUser, sender.get());*/
-
-        // TODO
+        friendshipService.blockUser(friendRequest.get());
         return ResponseEntity.ok("User has been successfully blocked");
     }
 }

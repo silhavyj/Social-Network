@@ -13,8 +13,6 @@ public interface IUserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
-    void deleteByEmail(String email);
-
     @Query("SELECT user FROM User user WHERE user.email <> ?2 AND (user.firstname LIKE %?1% OR user.lastname LIKE %?1%)")
     List<User> searchUsers(String name, String sessionUserEmail);
 }

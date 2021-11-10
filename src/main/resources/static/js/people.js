@@ -5,7 +5,7 @@ async function searchUsers(event) {
         name = "1";
     $.ajax({
         type: "GET",
-        url: "/friends/search-all/" + name,
+        url: "/people/" + name,
         complete: function(response) {
             $('#friends-msg-container').html('');
             $('#searched_users').html('');
@@ -39,7 +39,7 @@ function createARecordInSearchResultsTable(user) {
     '   <td class="align-middle"><h5><span class="badge badge-light">' + user['firstname'] + ' ' + user['lastname'] + '</span></h5></td>\n' +
     '   <td class="align-middle"><h5><span class="badge badge-light">' + user['email'] + '</span></h5></td>';
 
-    if (user['alreadyFriends'] === true) {
+    if (user['status'] === "PENDING") {
         row += '<td class="align-middle"><p class="text-large">Request pending...</p></td>';
     } else {
         row += '<td class="align-middle"><button class="btn btn-small btn-success" onclick="sendFriendRequest(this,' + "'" + user['email'] + "'" + ')">Send friend request</button>';
@@ -51,7 +51,7 @@ function createARecordInSearchResultsTable(user) {
 function sendFriendRequest(tdObject, email) {
     $.ajax({
         type: "POST",
-        url: "/friends/add-friend/" + email,
+        url: "/friends/" + email,
         complete: function(response) {
             $('#friends-msg-container').html('');
             if (response.status != 200) {
@@ -66,7 +66,7 @@ function sendFriendRequest(tdObject, email) {
 async function cancelFriendRequest(email) {
     $.ajax({
         type: "DELETE",
-        url: "/friends/delete-friend/" + email,
+        url: "/friends/" + email,
         complete: function() {
             location.reload()
         }
@@ -76,7 +76,7 @@ async function cancelFriendRequest(email) {
 async function acceptFriendRequest(email) {
     $.ajax({
         type: "PUT",
-        url: "/friends/accept-friend-request/" + email,
+        url: "/friends/" + email,
         complete: function() {
             location.reload()
         }
@@ -86,7 +86,7 @@ async function acceptFriendRequest(email) {
 async function blockUser(email) {
     $.ajax({
         type: "PUT",
-        url: "/friends/block-friend/" + email,
+        url: "/friends/blocked/" + email,
         complete: function() {
             location.reload()
         }

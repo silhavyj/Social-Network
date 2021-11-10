@@ -1,86 +1,95 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.friendship;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequest;
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequestStatus;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.SearchedUser;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.IFriendRequestRepository;
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequestStatus.ACCEPTED;
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequestStatus.PENDING;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequestStatus.*;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class FriendshipService implements IFriendshipService {
 
+    private final IUserRepository userRepository;
     private final IFriendRequestRepository friendRequestRepository;
-    private final IUserService userService;
 
     @Override
-    public List<User> getAllUsersFriends(String sessionUserEmail) {
-        return getAllUsersFriends(sessionUserEmail, ACCEPTED);
-    }
+    public List<SearchedUser> getAllPeople(String name, User sessionUser) {
+        var allPeople = userRepository.searchUsers(name, sessionUser.getEmail());
+        var acceptedFriends = getAllAcceptedFriends(sessionUser);
+        var pendingFriends = getAllPendingFriends(sessionUser);
 
-    @Override
-    public List<User> getAllUsersPendingFriends(String sessionUserEmail) {
-        return getAllUsersFriends(sessionUserEmail, PENDING);
-    }
-
-    @Override
-    public List<User> getAllUsersReceivedPendingFriends(String sessionUserEmail) {
-        return friendRequestRepository.findAllUsersReceivedFriendRequests(sessionUserEmail);
-    }
-
-    @Override
-    public List<User> getAllUsersSentPendingFriends(String sessionUserEmail) {
-        return friendRequestRepository.findAllUsersSentFriendRequests(sessionUserEmail);
-    }
-
-    @Override
-    public boolean isPendingFriend(String email, String sessionUserEmail) {
-        return isOnFriendList(getAllUsersPendingFriends(sessionUserEmail), email);
-    }
-
-    @Override
-    public boolean isFriend(String email, String sessionUserEmail) {
-        return isOnFriendList(getAllUsersFriends(sessionUserEmail), email);
-    }
-
-    @Override
-    public boolean isAlreadyFriendOrPendingFriend(String email, String sessionUserEmail) {
-       return isOnFriendList(getAllUsersFriends(sessionUserEmail), email) ||
-              isOnFriendList(getAllUsersPendingFriends(sessionUserEmail), email);
-    }
-
-    @Override
-    public List<SearchedUser> getAllSearchedUser(String name, String sessionUserEmail) {
-        var friends = getAllUsersFriends(sessionUserEmail);
-        var pendingFriends = getAllUsersPendingFriends(sessionUserEmail);
-        return userService.searchUsers(name, sessionUserEmail).stream()
-                .filter(user -> isOnFriendList(friends, user.getEmail()) == false)
-                .map(user -> new SearchedUser(user, isOnFriendList(pendingFriends, user.getEmail())))
+        return allPeople.stream()
+                .filter(user -> isOnFriendList(acceptedFriends, user.getEmail()) == false)
+                .map(user -> new SearchedUser(user, isOnFriendList(pendingFriends, user.getEmail()) ? PENDING : NOT_FRIENDS_YET))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void sendFriendRequest(User receiver, User sender) {
+    public List<SearchedUser> getAllAcceptedFriends(User sessionUser) {
+        var acceptedRequests = friendRequestRepository.findFriendRequestByStatus(ACCEPTED, sessionUser.getEmail());
+        return mapFriendRequestsOntoSearchedUsers(acceptedRequests, sessionUser.getEmail());
+    }
+
+    @Override
+    public List<SearchedUser> getAllPendingFriends(User sessionUser) {
+        var pendingRequests = friendRequestRepository.findFriendRequestByStatus(PENDING, sessionUser.getEmail());
+        return mapFriendRequestsOntoSearchedUsers(pendingRequests, sessionUser.getEmail());
+    }
+
+    @Override
+    public List<User> getAllReceivedPendingFriends(User sessionUser) {
+        return friendRequestRepository.findAllUsersReceivedFriendRequests(sessionUser.getEmail());
+    }
+
+    @Override
+    public List<User> getAllSentPendingFriends(User sessionUser) {
+        return friendRequestRepository.findAllUsersSentFriendRequests(sessionUser.getEmail());
+    }
+
+    @Override
+    public List<SearchedUser> getAllBlockedFriends(User sessionUser) {
+        var blockedRequests = friendRequestRepository.findBlockedFriendRequestsBySessionUser(sessionUser.getEmail());
+        return mapFriendRequestsOntoSearchedUsers(blockedRequests, sessionUser.getEmail());
+    }
+
+    @Override
+    public boolean isAlreadyFriendOrPendingFriend(String email, User sessionUser) {
+        return isFriend(email, sessionUser) || isPendingFriend(email, sessionUser);
+    }
+
+    @Override
+    public void sendFriendRequest(User user, User sessionUser) {
         FriendRequest friendRequest = new FriendRequest();
-        friendRequest.setRequestSender(sender);
-        friendRequest.setRequestReceiver(receiver);
+        friendRequest.setRequestSender(sessionUser);
+        friendRequest.setRequestReceiver(user);
         friendRequest.setStatus(PENDING);
         friendRequestRepository.save(friendRequest);
     }
 
     @Override
-    public void acceptFriendRequest(User receiver, User sender) {
-        Optional<FriendRequest> friendRequest = friendRequestRepository.findPendingFriendRequest(receiver.getEmail(), sender.getEmail());
+    public boolean isFriend(String email, User sessionUser) {
+        return isOnFriendList(getAllAcceptedFriends(sessionUser), email);
+    }
+
+    @Override
+    public boolean isPendingFriend(String email, User sessionUser) {
+        return isOnFriendList(getAllPendingFriends(sessionUser), email);
+    }
+
+    @Override
+    public void acceptFriendRequest(User sessionUser, User user) {
+        Optional<FriendRequest> friendRequest = friendRequestRepository.findPendingFriendRequest(sessionUser.getEmail(), user.getEmail());
         friendRequest.get().setStatus(ACCEPTED);
         friendRequestRepository.save(friendRequest.get());
     }
@@ -91,18 +100,30 @@ public class FriendshipService implements IFriendshipService {
         friendRequestRepository.delete(friendRequest.get());
     }
 
-    private boolean isOnFriendList(List<User> friends, String potentialFriendEmail) {
-        return friends.stream()
-                .filter(user -> user.getEmail().equals(potentialFriendEmail))
-                .findFirst()
-                .isPresent();
+    @Override
+    public void blockUser(FriendRequest friendRequest) {
+        friendRequest.setStatus(BLOCKED);
+        friendRequestRepository.save(friendRequest);
     }
 
-    private List<User> getAllUsersFriends(String email, FriendRequestStatus status) {
-        return friendRequestRepository.findAllUsersFriendRequests(email)
+    @Override
+    public Optional<FriendRequest> getFriendRequestToBlock(String senderEmail, User receiver) {
+        return friendRequestRepository.findPendingRequestToBeBlocked(senderEmail, receiver.getEmail());
+    }
+
+    private List<SearchedUser> mapFriendRequestsOntoSearchedUsers(List<FriendRequest> friendRequests, String sessionUserEmail) {
+        return friendRequests
                 .stream()
-                .filter(request -> request.getStatus().equals(status))
-                .map(request -> request.getRequestReceiver().getEmail().equals(email) ? request.getRequestSender() : request.getRequestReceiver())
+                .map(request -> request.getRequestReceiver().getEmail().equals(sessionUserEmail) ?
+                        new SearchedUser(request.getRequestSender(), request.getStatus()) :
+                        new SearchedUser(request.getRequestReceiver(), request.getStatus()))
                 .collect(Collectors.toList());
+    }
+
+    private boolean isOnFriendList(List<SearchedUser> users, String searchedUsersEmail) {
+        return users.stream()
+                .filter(user -> user.getEmail().equals(searchedUsersEmail))
+                .findFirst()
+                .isPresent();
     }
 }

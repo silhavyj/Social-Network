@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="/js/friends.js"></script>
+    <script src="/js/people.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -22,7 +22,7 @@
                     <a class="nav-link" th:href="@{/profile}">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/friends}">friends</a>
+                    <a class="nav-link active" th:href="@{/people}">People</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -33,7 +33,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" th:href="@{/}">Home</a>
                         <a class="dropdown-item" th:href="@{/profile}">Profile</a>
-                        <a class="dropdown-item" th:href="@{/friends}">friends</a>
+                        <a class="dropdown-item" th:href="@{/people}">People</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" th:href="@{/logout}">Log out</a>
                     </div>
@@ -89,7 +89,7 @@
                                 <td></td>
                                 <td></td>
                             </tr>
-                            <tr th:each="pending_friend : ${receiver_pending_requests}">
+                            <tr th:each="pending_friend : ${received_pending_requests}">
                                 <td><img th:src="${pending_friend.profilePicturePath}" class="img-thumbnail" style="width: 50%;"/></td>
                                 <td class="align-middle"><h5><span class="badge badge-light" th:text='${pending_friend.firstname + " " + pending_friend.lastname}'></span></h5></td>
                                 <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-success" th:attr="onclick=|acceptFriendRequest('${pending_friend.email}')|">Accept</button></td>
@@ -111,7 +111,7 @@
                         </tr>
                         </thead>
                         <tbody >
-                        <tr th:each="friend : ${friends}">
+                        <tr th:each="friend : ${accepted_friends}">
                             <td><img th:src="${friend.profilePicturePath}" class="img-thumbnail" style="width: 20%;"/></td>
                             <td class="align-middle"><h5><span class="badge badge-light" th:text='${friend.firstname + " " + friend.lastname}'></span></h5></td>
                             <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|cancelFriendRequest('${friend.email}')|" >Delete</button></td>

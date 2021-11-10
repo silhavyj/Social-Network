@@ -12,13 +12,13 @@ public class SearchedUser implements Serializable {
     private String firstname;
     private String lastname;
     private String email;
-    private Boolean alreadyFriends;
+    private FriendRequestStatus status;
 
-    public SearchedUser(final User user, boolean alreadyFriends) {
+    public SearchedUser(final User user, FriendRequestStatus status) {
         this.profilePicturePath = user.getProfilePicturePath();
         this.firstname = user.getFirstname();
         this.lastname = user.getLastname();
         this.email = user.getEmail();
-        this.alreadyFriends = alreadyFriends;
+        this.status = status;
     }
 }

@@ -118,6 +118,11 @@ public class FriendshipService implements IFriendshipService {
                friendRequestRepository.findBlockedRequest(receiverEmail, senderEmail).isPresent();
     }
 
+    @Override
+    public Optional<FriendRequest> getBLockedFriendship(String senderEmail, String receiverEmail) {
+        return friendRequestRepository.findBlockedRequest(senderEmail, receiverEmail);
+    }
+
     private List<SearchedUser> mapFriendRequestsOntoSearchedUsers(List<FriendRequest> friendRequests, String sessionUserEmail) {
         return friendRequests
                 .stream()

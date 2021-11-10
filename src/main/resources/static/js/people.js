@@ -92,3 +92,13 @@ async function blockUser(email) {
         }
     });
 }
+
+async function unblockUser(email) {
+    $.ajax({
+        type: "DELETE",
+        url: "/friends/blocked/" + email,
+        complete: function() {
+            location.reload()
+        }
+    });
+}

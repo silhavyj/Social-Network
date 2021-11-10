@@ -127,21 +127,19 @@ public class FriendshipController {
 
     @DeleteMapping("friends/blocked/{email}")
     public ResponseEntity<?> unblockUser(@CurrentSecurityContext(expression="authentication") Authentication authentication,
-                                       @PathVariable ("email") String email) {
-
-        // TODO
-        /*String sessionUserEmail = authentication.getName();
+                                         @PathVariable ("email") String email) {
+        String sessionUserEmail = authentication.getName();
         User sessionUser = userService.getUserByEmail(sessionUserEmail).get();
         Optional<User> sender = userService.getUserByEmail(email);
 
         if (sender.isEmpty())
             return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
 
-        Optional<FriendRequest> friendRequest = friendshipService.getFriendRequestToBlock(email, sessionUser);
+        Optional<FriendRequest> friendRequest = friendshipService.getBLockedFriendship(sender.get().getEmail(), sessionUserEmail);
         if (friendRequest.isEmpty())
-            return ResponseEntity.badRequest().body(NO_PENDING_REQUEST_TO_BE_BLOCKED_FOUND_ERR_MSG);
+            return ResponseEntity.badRequest().body(FRIENDSHIP_CANNOT_BE_UNBLOCKED_ERR_MSG);
 
-        friendshipService.blockUser(friendRequest.get());*/
-        return ResponseEntity.ok("");
+        friendshipService.deleteFriend(sessionUser, sender.get());
+        return ResponseEntity.ok(FRIENDSHIP_SUCCESSFULLY_UNBLOCKED);
     }
 }

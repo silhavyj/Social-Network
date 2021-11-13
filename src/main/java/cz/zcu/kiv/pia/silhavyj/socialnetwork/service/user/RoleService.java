@@ -27,4 +27,9 @@ public class RoleService implements IRoleService {
     public Optional<Role> getRoleByUserRole(UserRole userRole) {
         return roleRepository.getRoleByUserRole(userRole);
     }
+
+    @Override
+    public long getRowCount() {
+        return roleRepository.count();
+    }
 }

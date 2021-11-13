@@ -9,4 +9,5 @@ public interface IRoleService {
 
     void createAllRoles();
     Optional<Role> getRoleByUserRole(UserRole userRole);
+    long getRowCount();
 }

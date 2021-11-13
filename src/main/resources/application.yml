@@ -11,11 +11,14 @@ spring:
                                                           # with port 5432 exposed to the local machine
   jpa:
     hibernate:
-      ddl-auto: create                                    # create a database called 'pia-silhavyj' on startup and drop it afterwards
+      ddl-auto: update
     properties:
       hibernate:
+        show_sql: false
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+        hbm2dll:
+          create_namespaces: true                         # create database schema if it doesn't exists
     show-sql: true
 
   mail:

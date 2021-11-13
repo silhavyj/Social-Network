@@ -33,8 +33,10 @@ public class SocialNetworkApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		addDefaultRolesToDatabase();
-		addDefaultUsersToDatabase();
+		if (roleService.getRowCount() == 0) {
+			addDefaultRolesToDatabase();
+			addDefaultUsersToDatabase();
+		}
 	}
 
 	private void addDefaultRolesToDatabase() {

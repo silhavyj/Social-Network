@@ -6,6 +6,7 @@ import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.registration.IRegistrationS
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.token.ITokenService;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -104,5 +105,14 @@ public class RegistrationController {
         tokenService.deleteTokenByTokenValue(token);
         model.addAttribute(SIGN_IN_FORM_SUCCESS_MSG_NAME, PASSWORD_UPDATED_SUCCESSFULLY_INFO_MSG);
         return "sign-in";
+    }
+
+    @GetMapping("/taken-emails/{email}")
+    public ResponseEntity<?> getExistingEmailAddress(@PathVariable String email) {
+        Optional<User> user = userService.getUserByEmail(email);
+        if (user.isPresent()) {
+            return ResponseEntity.ok("taken");
+        }
+        return ResponseEntity.ok("free");
     }
 }

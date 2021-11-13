@@ -2,7 +2,6 @@ package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.Role;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.password.SecurePasswordValidator;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;

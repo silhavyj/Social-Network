@@ -1,8 +1,54 @@
+function submit_post() {
+    const content = $('#new-post-content').val();
+    if (content == "")
+        return;
+    $('#new-post-content').val('');
+
+    let data = JSON.stringify(content);
+    data = data.slice(1, data.length - 1);
+
+    $.ajax({
+        type: "POST",
+        url: "/posts/normal-posts",
+        contentType: "application/json",
+        data: data,
+        complete: function(response) {
+            if (response.status == 200)
+                fetchLatestPosts();
+        }
+    });
+}
+
 function fetchUsersPosts() {
     $.ajax({
         type: "GET",
         url: "/posts/normal-posts",
         complete: function(response) {
+            if (response.status != 200)
+                return;
+            let posts = JSON.parse(response.responseText);
+            let html = '';
+            for (let index in posts)
+                html += createPost(posts[index]);
+            $('#posts').html(html);
+        }
+    });
+}
+
+function setFetchPostsTimer() {
+    fetchUsersPosts();
+    setInterval(function(){
+        fetchLatestPosts();
+    }, 60 * 1000);
+}
+
+function fetchLatestPosts() {
+    $.ajax({
+        type: "GET",
+        url: "/posts",
+        complete: function(response) {
+            if (response.status != 200)
+                return;
             let posts = JSON.parse(response.responseText);
             let html = '';
             for (let index in posts)

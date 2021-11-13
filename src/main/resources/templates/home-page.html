@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="/js/home-page.js"></script>
+    <script src="/js/posts.js"></script>
 </head>
-<body>
+<body onload="setFetchPostsTimer()">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -58,32 +58,7 @@
                 <button class="btn btn-dark float-right" onclick="submit_post()">Submit Post</button>
             </div>
         </div>
-
-        <div class="card mt-4 text-dark mb-3" style="width: 70%; margin: auto">
-            <div class="card-header">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-3">
-                            <img src="" class="img-responsive" width="70" height="70">
-                        </div>
-                        <div class="col-9">
-                            <div class="row">
-                                <span>2021/04/25</span>
-                            </div>
-                            <div class="row">
-                                <span><strong>Kuba Silhavy</strong></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <p class="card-text">What has everyone been up to lately?</p>
-            </div>
-            <div class="card-footer text-muted">
-            </div>
-        </div>
-        
+        <div id="posts"></div>
     </div>
 
     <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>

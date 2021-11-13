@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IPostService {
 
-    void createPost(User sessionUser, String message);
-    List<Post> getUsersPosts(User sessionUser);
+    void createPost(User user, String message);
+    List<Post> getUsersPosts(String userEmail);
+    List<Post> getMainPagePosts(User user);
 }

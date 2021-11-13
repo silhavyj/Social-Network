@@ -30,12 +30,18 @@ public class PostController {
     @GetMapping("/normal-posts")
     public List<Post> getLatestUsersPosts(@CurrentSecurityContext(expression="authentication") Authentication authentication) {
         String email = authentication.getName();
-        User sessionUser = userService.getUserByEmail(email).get();
-        return postService.getUsersPosts(sessionUser);
+        return postService.getUsersPosts(email);
     }
 
     @PostMapping("/announcements")
     public void addAnnouncements() {
+        // TODO
+    }
 
+    @GetMapping
+    public List<Post> getAllPosts(@CurrentSecurityContext(expression="authentication") Authentication authentication) {
+        String email = authentication.getName();
+        User sessionUser = userService.getUserByEmail(email).get();
+        return postService.getMainPagePosts(sessionUser);
     }
 }

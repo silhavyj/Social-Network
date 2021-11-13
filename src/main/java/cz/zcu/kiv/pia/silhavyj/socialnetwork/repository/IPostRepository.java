@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface IPostRepository extends JpaRepository<Post, Long> {
 
-    @Query("SELECT post from Post post WHERE post.user.email = ?1 ORDER BY post.postedAt DESC")
+    @Query("SELECT post from Post post WHERE post.user.email = ?1 AND post.postType = cz.zcu.kiv.pia.silhavyj.socialnetwork.model.post.PostType.NORMAL_POST ORDER BY post.postedAt DESC")
     List<Post> findTopUsersPosts(String userEmail, Pageable pageable);
 }

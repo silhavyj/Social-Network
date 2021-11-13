@@ -1,6 +1,6 @@
 function submit_post() {
     const content = $('#new-post-content').val();
-    if (content == "")
+    if (content === "")
         return;
     $('#new-post-content').val('');
 
@@ -83,4 +83,24 @@ function createPost(post) {
         '      <div class="card-footer text-muted">\n' +
         '      </div>\n' +
         '    </div>';
+}
+
+function submit_announcement() {
+    const content = $('#new-announcement-content').val();
+    if (content === "")
+        return;
+
+    $('#new-post-content').val('');
+    let data = JSON.stringify(content);
+    data = data.slice(1, data.length - 1);
+
+    $.ajax({
+        type: "POST",
+        url: "/posts/announcements",
+        contentType: "application/json",
+        data: data,
+        complete: function(response) {
+            // TODO
+        }
+    });
 }

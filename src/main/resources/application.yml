@@ -18,7 +18,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         hbm2dll:
-          create_namespaces: true                         # create database schema if it doesn't exists
+          create_namespaces: true                         # create database schema if it doesn't exist
     show-sql: true
 
   mail:

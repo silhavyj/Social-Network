@@ -34,8 +34,11 @@ public class PostController {
     }
 
     @PostMapping("/announcements")
-    public void addAnnouncements() {
-        // TODO
+    public void addAnnouncements(@CurrentSecurityContext(expression="authentication") Authentication authentication,
+                                 @RequestBody String message) {
+        String email = authentication.getName();
+        User sessionUser = userService.getUserByEmail(email).get();
+        postService.createAnnouncement(sessionUser, message);
     }
 
     @GetMapping

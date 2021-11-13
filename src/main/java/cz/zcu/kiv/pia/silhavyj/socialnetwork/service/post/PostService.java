@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.post.PostType.ANNOUNCEMENT;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.post.PostType.NORMAL_POST;
 
 @Service
@@ -48,5 +49,11 @@ public class PostService implements IPostService {
                 .sorted(Comparator.comparing(Post::getPostedAt).reversed())
                 .limit(appConfiguration.getPostsToDisplayOnProfilePage())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void createAnnouncement(User user, String message) {
+        Post post = new Post(user, message, ANNOUNCEMENT);
+        postRepository.save(post);
     }
 }

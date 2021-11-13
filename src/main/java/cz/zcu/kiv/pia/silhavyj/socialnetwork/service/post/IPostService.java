@@ -10,4 +10,5 @@ public interface IPostService {
     void createPost(User user, String message);
     List<Post> getUsersPosts(String userEmail);
     List<Post> getMainPagePosts(User user);
+    void createAnnouncement(User user, String message);
 }

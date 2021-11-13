@@ -123,6 +123,14 @@ public class UserService implements UserDetailsService, IUserService {
         userRepository.save(user);
     }
 
+    @Override
+    public void removeAdminPrivileges(String email) {
+        User user = userRepository.findByEmail(email).get();
+        Role adminRole = roleService.getRoleByUserRole(ADMIN).get();
+        user.getRoles().remove(adminRole);
+        userRepository.save(user);
+    }
+
     private void saveProfilePicture(final String directory, final String filename, MultipartFile picture) {
         Path uploadPath = Paths.get(directory);
         try {

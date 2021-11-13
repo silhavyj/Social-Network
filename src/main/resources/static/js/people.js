@@ -112,3 +112,13 @@ async function escalateToAdmin(email) {
         }
     });
 }
+
+async function removeAdminPrivileges(email) {
+    $.ajax({
+        type: "DELETE",
+        url: "/admin/" + email,
+        complete: function() {
+            location.reload()
+        }
+    });
+}

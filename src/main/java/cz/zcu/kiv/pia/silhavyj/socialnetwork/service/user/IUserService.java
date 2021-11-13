@@ -19,4 +19,5 @@ public interface IUserService {
     void updatePersonalInfo(User newUser, User oldUser);
     List<User> searchUsers(String name, String sessionUserEmail);
     void escalateToAdmin(String email);
+    void removeAdminPrivileges(String email);
 }

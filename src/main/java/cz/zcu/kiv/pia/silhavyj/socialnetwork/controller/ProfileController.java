@@ -1,6 +1,8 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.controller;
 
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.Role;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IRoleService;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,7 @@ import javax.validation.ValidatorFactory;
 import java.util.Set;
 
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.ProfileConstants.*;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole.ADMIN;
 
 @Controller
 @Validated
@@ -29,12 +32,17 @@ import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.ProfileConstants.*;
 public class ProfileController {
 
     private final IUserService userService;
+    private final IRoleService roleService;
 
     @GetMapping("/profile")
     public String getProfile(@CurrentSecurityContext(expression="authentication") Authentication authentication, Model model) {
         String email = authentication.getName();
         User user = userService.getUserByEmail(email).get();
         model.addAttribute("session_user", user);
+        Role adminRole = roleService.getRoleByUserRole(ADMIN).get();
+        if (user.getRoles().contains(adminRole)) {
+            model.addAttribute("admin", true);
+        }
         return "profile";
     }
 

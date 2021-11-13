@@ -15,13 +15,13 @@ import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole.ADMIN;
 
 @Controller
 @RequiredArgsConstructor
-public class HomepageController {
+public class AdminController {
 
     private final IUserService userService;
     private final IRoleService roleService;
 
-    @GetMapping("/")
-    public String homePage(@CurrentSecurityContext(expression="authentication") Authentication authentication, Model model) {
+    @GetMapping("/admin")
+    public String getAdminPage(@CurrentSecurityContext(expression="authentication") Authentication authentication, Model model) {
         String email = authentication.getName();
         User user = userService.getUserByEmail(email).get();
         model.addAttribute("session_user", user);
@@ -29,7 +29,6 @@ public class HomepageController {
         if (user.getRoles().contains(adminRole)) {
             model.addAttribute("admin", true);
         }
-        return "home-page";
+        return "admin";
     }
 }
-

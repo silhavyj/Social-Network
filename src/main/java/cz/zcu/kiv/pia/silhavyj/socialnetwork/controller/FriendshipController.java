@@ -2,8 +2,10 @@ package cz.zcu.kiv.pia.silhavyj.socialnetwork.controller;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.config.AppConfiguration;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequest;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.Role;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.friendship.IFriendshipService;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IRoleService;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.FriendshipConstants.*;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole.ADMIN;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ public class FriendshipController {
     private final IUserService userService;
     private final IFriendshipService friendshipService;
     private final AppConfiguration appConfiguration;
+    private final IRoleService roleService;
 
     @GetMapping("/people")
     public String getFriendshipManagementPage(@CurrentSecurityContext(expression="authentication") Authentication authentication, Model model) {
@@ -35,6 +39,11 @@ public class FriendshipController {
         model.addAttribute("sent_pending_requests", friendshipService.getAllSentPendingFriends(sessionUser));
         model.addAttribute("accepted_friends", friendshipService.getAllAcceptedFriends(sessionUser));
         model.addAttribute("blocked_friends", friendshipService.getAllBlockedFriends(sessionUser));
+
+        Role adminRole = roleService.getRoleByUserRole(ADMIN).get();
+        if (sessionUser.getRoles().contains(adminRole)) {
+            model.addAttribute("admin", true);
+        }
         return "people";
     }
 

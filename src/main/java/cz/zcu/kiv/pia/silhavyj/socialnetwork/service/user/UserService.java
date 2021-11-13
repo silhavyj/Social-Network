@@ -102,6 +102,7 @@ public class UserService implements UserDetailsService, IUserService {
         newUser.setId(oldUser.getId());
         newUser.setEnabled(true);
         newUser.setEmail(oldUser.getEmail());
+        newUser.setRoles(oldUser.getRoles());
         newUser.setProfilePicturePath(oldUser.getProfilePicturePath());
     }
 

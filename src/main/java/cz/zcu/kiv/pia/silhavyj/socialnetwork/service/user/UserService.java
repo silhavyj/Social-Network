@@ -1,6 +1,8 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user;
 
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.Role;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.validation.password.SecurePasswordValidator;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import java.util.Optional;
 
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.UserConstants.*;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole.ADMIN;
 
 @Service
 @Transactional
@@ -38,6 +41,7 @@ public class UserService implements UserDetailsService, IUserService {
     private final IUserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final SecurePasswordValidator securePasswordValidator;
+    private final IRoleService roleService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -109,6 +113,14 @@ public class UserService implements UserDetailsService, IUserService {
     @Override
     public List<User> searchUsers(String name, String sessionUserEmail) {
         return userRepository.searchUsers(name, sessionUserEmail);
+    }
+
+    @Override
+    public void escalateToAdmin(String email) {
+        User user = userRepository.findByEmail(email).get();
+        Role adminRole = roleService.getRoleByUserRole(ADMIN).get();
+        user.getRoles().add(adminRole);
+        userRepository.save(user);
     }
 
     private void saveProfilePicture(final String directory, final String filename, MultipartFile picture) {

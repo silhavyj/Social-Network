@@ -9,7 +9,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "userRole")
 @Getter
 @Setter
 @Table(name = "roles")

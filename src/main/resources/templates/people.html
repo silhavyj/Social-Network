@@ -74,78 +74,96 @@
             </table>
         </div>
         <hr>
-        <div class="row">
-            <div class="col-6">
-                <div class="container">
-                    <table class="table">
-                        <thead>
-                        <tr class="bg-info">
-                            <th style="color: white;" scope="col" colspan="5">
-                                <span>Pending requests</span>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody id="pending-requests-table">
-                            <tr th:each="pending_friend : ${sent_pending_requests}">
-                                <td><img th:src="${pending_friend.profilePicturePath}" class="img-thumbnail" style="width: 20%;"/></td>
-                                <td class="align-middle"><h5><span class="badge badge-light" th:text='${pending_friend.firstname + " " + pending_friend.lastname}'></span></h5></td>
-                                <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|cancelFriendRequest('${pending_friend.email}')|" >Cancel</button></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr th:each="pending_friend : ${received_pending_requests}">
-                                <td><img th:src="${pending_friend.profilePicturePath}" class="img-thumbnail" style="width: 50%;"/></td>
-                                <td class="align-middle"><h5><span class="badge badge-light" th:text='${pending_friend.firstname + " " + pending_friend.lastname}'></span></h5></td>
-                                <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-success" th:attr="onclick=|acceptFriendRequest('${pending_friend.email}')|">Accept</button></td>
-                                <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|cancelFriendRequest('${pending_friend.email}')|">Reject</button></td>
-                                <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|blockUser('${pending_friend.email}')|">Block</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="container">
-                    <table class="table">
-                        <thead>
-                        <tr class="bg-success">
-                            <th style="color: white;" scope="col" colspan="3">
-                                <span>Friend list</span>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody >
-                        <tr th:each="friend : ${accepted_friends}">
-                            <td><img th:src="${friend.profilePicturePath}" class="img-thumbnail" style="width: 20%;"/></td>
-                            <td class="align-middle"><h5><span class="badge badge-light" th:text='${friend.firstname + " " + friend.lastname}'></span></h5></td>
-                            <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|cancelFriendRequest('${friend.email}')|" >Delete</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <div class="container">
-                        <table class="table">
-                            <thead>
-                            <tr class="bg-danger">
-                                <th style="color: white;" scope="col" colspan="3">
-                                    <span>Blocked users</span>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody >
-                            <tr th:each="friend : ${blocked_friends}">
-                                <td><img th:src="${friend.profilePicturePath}" class="img-thumbnail" style="width: 20%;"/></td>
-                                <td class="align-middle"><h5><span class="badge badge-light" th:text='${friend.firstname + " " + friend.lastname}'></span></h5></td>
-                                <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|unblockUser('${friend.email}')|" >Delete</button></td>
-                            </tr>
-                            </tbody>
-                        </table>
+        <div class="container">
+            <table class="table">
+                <thead>
+                <tr class="bg-info">
+                    <th style="color: white;" scope="col" colspan="5">
+                        <span>Pending requests</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody id="pending-requests-table">
+                <tr th:each="pending_friend : ${sent_pending_requests}">
+                    <td><img th:src="${pending_friend.profilePicturePath}" class="img-thumbnail" style="width: 10%;"/></td>
+                    <td class="align-middle"><h5><span class="badge badge-light" th:text='${pending_friend.firstname + " " + pending_friend.lastname}'></span></h5></td>
+                    <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|cancelFriendRequest('${pending_friend.email}')|" >Cancel</button></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr th:each="pending_friend : ${received_pending_requests}">
+                    <td><img th:src="${pending_friend.profilePicturePath}" class="img-thumbnail" style="width: 10%;"/></td>
+                    <td class="align-middle"><h5><span class="badge badge-light" th:text='${pending_friend.firstname + " " + pending_friend.lastname}'></span></h5></td>
+                    <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-success" th:attr="onclick=|acceptFriendRequest('${pending_friend.email}')|">Accept</button></td>
+                    <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|cancelFriendRequest('${pending_friend.email}')|">Reject</button></td>
+                    <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|blockUser('${pending_friend.email}')|">Block</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container">
+            <table class="table">
+                <thead>
+                <tr class="bg-success">
+                    <th style="color: white;" scope="col" colspan="4">
+                        <span>Friend list</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody >
+                <tr th:each="friend : ${accepted_friends_not_admins}">
+                    <td><img th:src="${friend.profilePicturePath}" class="img-thumbnail" style="width: 10%;"/></td>
+                    <td class="align-middle"><h5><span class="badge badge-light" th:text='${friend.firstname + " " + friend.lastname}'></span></h5></td>
+                    <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|cancelFriendRequest('${friend.email}')|" >Delete</button></td>
+                    <div th:if="${admin} != null">
+                        <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-info" data-toggle="modal" th:attr="data-target='#model-'+${friend.email}">Make Admin</button></td>
+                        <!-- Modal -->
+                        <div class="modal fade" th:attr="id='model-'+${friend.email}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Escalating user privileges</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to assign user <span style="font-weight: bold;" th:text='${friend.firstname + " " + friend.lastname}'></span> administrator privileges?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" th:attr="onclick=|escalateToAdmin('${friend.email}')|">Confirm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </tr>
+                <tr th:each="friend : ${accepted_friends_admins}">
+                    <td><img th:src="${friend.profilePicturePath}" class="img-thumbnail" style="width: 10%;"/></td>
+                    <td class="align-middle"><h5><span class="badge badge-light" th:text='${friend.firstname + " " + friend.lastname}'></span></h5></td>
+                    <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|cancelFriendRequest('${friend.email}')|" >Delete</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container">
+            <table class="table">
+                <thead>
+                <tr class="bg-danger">
+                    <th style="color: white;" scope="col" colspan="3">
+                        <span>Blocked users</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody >
+                <tr th:each="friend : ${blocked_friends}">
+                    <td><img th:src="${friend.profilePicturePath}" class="img-thumbnail" style="width: 10%;"/></td>
+                    <td class="align-middle"><h5><span class="badge badge-light" th:text='${friend.firstname + " " + friend.lastname}'></span></h5></td>
+                    <td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" th:attr="onclick=|unblockUser('${friend.email}')|" >Delete</button></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface IFriendshipService {
 
     List<SearchedUser> getAllPeople(String name, User sessionUser);
+    List<SearchedUser> getAllAcceptedFriendsAdmins(User sessionUser);
+    List<SearchedUser> getAllAcceptedFriendsNotAdmins(User sessionUser);
     List<SearchedUser> getAllAcceptedFriends(User sessionUser);
     List<SearchedUser> getAllPendingFriends(User sessionUser);
     List<User> getAllReceivedPendingFriends(User sessionUser);

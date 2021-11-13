@@ -102,3 +102,13 @@ async function unblockUser(email) {
         }
     });
 }
+
+async function escalateToAdmin(email) {
+    $.ajax({
+        type: "PUT",
+        url: "/admin/" + email,
+        complete: function() {
+            location.reload()
+        }
+    });
+}

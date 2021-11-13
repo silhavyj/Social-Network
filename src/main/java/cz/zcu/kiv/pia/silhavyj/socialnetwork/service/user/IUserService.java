@@ -18,4 +18,5 @@ public interface IUserService {
     boolean isSecurePassword(String password);
     void updatePersonalInfo(User newUser, User oldUser);
     List<User> searchUsers(String name, String sessionUserEmail);
+    void escalateToAdmin(String email);
 }

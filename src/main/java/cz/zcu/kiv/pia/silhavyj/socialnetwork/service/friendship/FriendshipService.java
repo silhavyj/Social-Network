@@ -2,9 +2,12 @@ package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.friendship;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequest;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.SearchedUser;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.Role;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.IFriendRequestRepository;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.IUserRepository;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequestStatus.*;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole.ADMIN;
 
 @Service
 @Transactional
@@ -22,6 +26,7 @@ public class FriendshipService implements IFriendshipService {
 
     private final IUserRepository userRepository;
     private final IFriendRequestRepository friendRequestRepository;
+    private final IRoleService roleService;
 
     @Override
     public List<SearchedUser> getAllPeople(String name, User sessionUser) {
@@ -34,6 +39,20 @@ public class FriendshipService implements IFriendshipService {
                 .filter(user -> isFriendshipBlocked(sessionUser.getEmail(), user.getEmail()) == false)
                 .map(user -> new SearchedUser(user, isOnFriendList(pendingFriends, user.getEmail()) ? PENDING : NOT_FRIENDS_YET))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SearchedUser> getAllAcceptedFriendsAdmins(User sessionUser) {
+        var acceptedRequests = friendRequestRepository.findFriendRequestByStatus(ACCEPTED, sessionUser.getEmail());
+        var friendsAdmins = mapFriendRequestsOntoSearchedUsersWithRole(acceptedRequests, sessionUser.getEmail(), true);
+        return friendsAdmins;
+    }
+
+    @Override
+    public List<SearchedUser> getAllAcceptedFriendsNotAdmins(User sessionUser) {
+        var acceptedRequests = friendRequestRepository.findFriendRequestByStatus(ACCEPTED, sessionUser.getEmail());
+        var friendsNotAdmins =  mapFriendRequestsOntoSearchedUsersWithRole(acceptedRequests, sessionUser.getEmail(), false);
+        return friendsNotAdmins;
     }
 
     @Override
@@ -126,6 +145,22 @@ public class FriendshipService implements IFriendshipService {
     private List<SearchedUser> mapFriendRequestsOntoSearchedUsers(List<FriendRequest> friendRequests, String sessionUserEmail) {
         return friendRequests
                 .stream()
+                .map(request -> request.getRequestReceiver().getEmail().equals(sessionUserEmail) ?
+                        new SearchedUser(request.getRequestSender(), request.getStatus()) :
+                        new SearchedUser(request.getRequestReceiver(), request.getStatus()))
+                .collect(Collectors.toList());
+    }
+
+    private List<SearchedUser> mapFriendRequestsOntoSearchedUsersWithRole(List<FriendRequest> friendRequests, String sessionUserEmail, boolean roleAdmin) {
+        Role adminRole = roleService.getRoleByUserRole(ADMIN).get();
+        return friendRequests
+                .stream()
+                .filter(friendRequest -> {
+                   boolean isAdmin = friendRequest.getRequestReceiver().getEmail().equals(sessionUserEmail) ?
+                            friendRequest.getRequestSender().getRoles().contains(adminRole) :
+                            friendRequest.getRequestReceiver().getRoles().contains(adminRole);
+                   return roleAdmin ? isAdmin : !isAdmin;
+                })
                 .map(request -> request.getRequestReceiver().getEmail().equals(sessionUserEmail) ?
                         new SearchedUser(request.getRequestSender(), request.getStatus()) :
                         new SearchedUser(request.getRequestReceiver(), request.getStatus()))

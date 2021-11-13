@@ -9,6 +9,7 @@ import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IRoleService;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,8 @@ public class FriendshipController {
 
         model.addAttribute("received_pending_requests", friendshipService.getAllReceivedPendingFriends(sessionUser));
         model.addAttribute("sent_pending_requests", friendshipService.getAllSentPendingFriends(sessionUser));
-        model.addAttribute("accepted_friends", friendshipService.getAllAcceptedFriends(sessionUser));
+        model.addAttribute("accepted_friends_not_admins", friendshipService.getAllAcceptedFriendsNotAdmins(sessionUser));
+        model.addAttribute("accepted_friends_admins", friendshipService.getAllAcceptedFriendsAdmins(sessionUser));
         model.addAttribute("blocked_friends", friendshipService.getAllBlockedFriends(sessionUser));
 
         Role adminRole = roleService.getRoleByUserRole(ADMIN).get();

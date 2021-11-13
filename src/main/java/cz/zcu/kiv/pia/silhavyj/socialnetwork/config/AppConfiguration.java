@@ -25,6 +25,7 @@ public class AppConfiguration {
     private IpBanConfig ipBanConfig;
     private List<String> bannedIp;
     private int resetPasswordExpirationTime;
+    private int postsToDisplayOnProfilePage;
 
     @Getter
     @Setter

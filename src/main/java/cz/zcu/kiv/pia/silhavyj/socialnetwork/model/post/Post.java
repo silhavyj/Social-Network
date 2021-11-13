@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static java.time.LocalDateTime.now;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,4 +31,11 @@ public class Post {
     String content;
 
     private LocalDateTime postedAt;
+
+    public Post(User user, String content, PostType postType) {
+        this.content = content;
+        this.user = user;
+        this.postType = postType;
+        this.postedAt = now();
+    }
 }

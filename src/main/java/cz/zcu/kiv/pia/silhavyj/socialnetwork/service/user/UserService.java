@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -128,6 +129,13 @@ public class UserService implements UserDetailsService, IUserService {
         Role adminRole = roleService.getRoleByUserRole(ADMIN).get();
         user.getRoles().remove(adminRole);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<User> getAdmins() {
+        ArrayList<Role> roles = new ArrayList<>();
+        roles.add(roleService.getRoleByUserRole(ADMIN).get());
+        return userRepository.findByRolesIn(roles);
     }
 
     private void saveProfilePicture(final String directory, final String filename, MultipartFile picture) {

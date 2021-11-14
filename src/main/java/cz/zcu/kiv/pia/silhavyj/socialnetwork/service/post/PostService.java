@@ -5,6 +5,7 @@ import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.post.Post;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.IPostRepository;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.friendship.IFriendshipService;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class PostService implements IPostService {
     private final IPostRepository postRepository;
     private final AppConfiguration appConfiguration;
     private final IFriendshipService friendshipService;
+    private final IUserService userService;
 
     @Override
     public void createPost(User user, String message) {
@@ -45,6 +47,10 @@ public class PostService implements IPostService {
         for (var friend : friends) {
             posts.addAll(getUsersPosts(friend.getEmail()));
         }
+        List<User> admins = userService.getAdmins();
+        for (var admin : admins) {
+            posts.addAll(getUsersAnnouncements(admin.getEmail()));
+        }
         return posts.stream()
                 .sorted(Comparator.comparing(Post::getPostedAt).reversed())
                 .limit(appConfiguration.getPostsToDisplayOnProfilePage())
@@ -55,5 +61,10 @@ public class PostService implements IPostService {
     public void createAnnouncement(User user, String message) {
         Post post = new Post(user, message, ANNOUNCEMENT);
         postRepository.save(post);
+    }
+
+    @Override
+    public List<Post> getUsersAnnouncements(String userEmail) {
+        return postRepository.findTopUsersAnnouncements(userEmail, PageRequest.of(0, appConfiguration.getPostsToDisplayOnProfilePage()));
     }
 }

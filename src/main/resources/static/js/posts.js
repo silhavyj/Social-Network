@@ -36,7 +36,7 @@ function fetchUsersPosts() {
 }
 
 function setFetchPostsTimer() {
-    fetchUsersPosts();
+    fetchLatestPosts();
     setInterval(function(){
         fetchLatestPosts();
     }, 60 * 1000);
@@ -59,7 +59,7 @@ function fetchLatestPosts() {
 }
 
 function createPost(post) {
-    return '    <div class="card mt-4 text-dark mb-3" style="width: 70%; margin: auto">\n' +
+    return '    <div class="card mt-4 text-dark ' + (post['postType'] == "ANNOUNCEMENT" ? "bg-info " : " ") + 'mb-3" style="width: 70%; margin: auto">\n' +
         '      <div class="card-header">\n' +
         '        <div class="container">\n' +
         '          <div class="row">\n' +
@@ -85,6 +85,22 @@ function createPost(post) {
         '    </div>';
 }
 
+function fetchAnnouncements() {
+    $.ajax({
+        type: "GET",
+        url: "/posts/announcements",
+        complete: function(response) {
+            if (response.status != 200)
+                return;
+            let posts = JSON.parse(response.responseText);
+            let html = '';
+            for (let index in posts)
+                html += createPost(posts[index]);
+            $('#announcements').html(html);
+        }
+    });
+}
+
 function submit_announcement() {
     const content = $('#new-announcement-content').val();
     if (content === "")
@@ -100,7 +116,7 @@ function submit_announcement() {
         contentType: "application/json",
         data: data,
         complete: function(response) {
-            // TODO
+            location.reload();
         }
     });
 }

@@ -20,4 +20,5 @@ public interface IUserService {
     List<User> searchUsers(String name, String sessionUserEmail);
     void escalateToAdmin(String email);
     void removeAdminPrivileges(String email);
+    List<User> getAdmins();
 }

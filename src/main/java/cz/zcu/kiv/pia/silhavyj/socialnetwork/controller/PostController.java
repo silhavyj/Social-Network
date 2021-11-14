@@ -41,6 +41,12 @@ public class PostController {
         postService.createAnnouncement(sessionUser, message);
     }
 
+    @GetMapping("/announcements")
+    public List<Post> getLatestUsersAnnouncements(@CurrentSecurityContext(expression="authentication") Authentication authentication) {
+        String email = authentication.getName();
+        return postService.getUsersAnnouncements(email);
+    }
+
     @GetMapping
     public List<Post> getAllPosts(@CurrentSecurityContext(expression="authentication") Authentication authentication) {
         String email = authentication.getName();

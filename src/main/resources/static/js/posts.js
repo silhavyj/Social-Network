@@ -59,7 +59,7 @@ function fetchLatestPosts() {
 }
 
 function createPost(post) {
-    return '    <div class="card mt-4 text-dark ' + (post['postType'] == "ANNOUNCEMENT" ? "bg-info " : " ") + 'mb-3" style="width: 70%; margin: auto">\n' +
+    return '    <div class="card mt-4 text-dark ' + (post['postType'] == "ANNOUNCEMENT" ? "border-primary " : " ") + 'mb-3" style="width: 70%; margin: auto">\n' +
         '      <div class="card-header">\n' +
         '        <div class="container">\n' +
         '          <div class="row">\n' +
@@ -77,7 +77,7 @@ function createPost(post) {
         '          </div>\n' +
         '        </div>\n' +
         '      </div>\n' +
-        '      <div class="card-body">\n' +
+        '      <div class="card-body ' + (post['postType'] == "ANNOUNCEMENT" ? "text-primary" : "") + '">\n' +
         '        <p class="card-text">' + post['content'] + '</p>\n' +
         '      </div>\n' +
         '      <div class="card-footer text-muted">\n' +

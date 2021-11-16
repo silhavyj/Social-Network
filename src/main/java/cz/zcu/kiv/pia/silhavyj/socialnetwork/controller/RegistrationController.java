@@ -21,8 +21,7 @@ import javax.validation.constraints.Email;
 
 import java.util.Optional;
 
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.ProfileConstants.PASSWORD_IS_NOT_SECURE_ENOUGH_ERR_MSG;
-import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.ProfileConstants.PASSWORD_UPDATED_SUCCESSFULLY_INFO_MSG;
+import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.ProfileConstants.*;
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.RegistrationConstants.*;
 
 @Controller
@@ -111,8 +110,8 @@ public class RegistrationController {
     public ResponseEntity<?> getExistingEmailAddress(@PathVariable String email) {
         Optional<User> user = userService.getUserByEmail(email);
         if (user.isPresent()) {
-            return ResponseEntity.ok("taken");
+            return ResponseEntity.ok(EMAIL_IS_TAKEN_KEYWORD);
         }
-        return ResponseEntity.ok("free");
+        return ResponseEntity.ok(EMAIL_IS_FREE_KEYWORD);
     }
 }

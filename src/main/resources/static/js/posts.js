@@ -28,9 +28,13 @@ function fetchUsersPosts() {
                 return;
             let posts = JSON.parse(response.responseText);
             let html = '';
-            for (let index in posts)
+            let modals = '';
+            for (let index in posts) {
                 html += createPost(posts[index], posts[index]['user']);
+                modals += createPopUpOfPeopleWhoLikedPost(posts[index]);
+            }
             $('#posts').html(html);
+            $('#modals').html(modals);
         }
     });
 }
@@ -53,11 +57,41 @@ function fetchLatestPosts() {
             let posts = JSON.parse(response.responseText)['posts'];
             let user = JSON.parse(response.responseText)['user'];
             let html = '';
-            for (let index in posts)
+            let modals = '';
+            for (let index in posts) {
                 html += createPost(posts[index], user);
+                modals += createPopUpOfPeopleWhoLikedPost(posts[index]);
+            }
             $('#posts').html(html);
+            $('#modals').html(modals);
         }
     });
+}
+
+function createPopUpOfPeopleWhoLikedPost(post) {
+    return '    <div class="modal fade" id="' + post['id'] + 'Modal" tabindex="-1" role="dialog" aria-labelledby="' + post['id'] + 'Modal" aria-hidden="true">\n' +
+        '        <div class="modal-dialog" role="document">\n' +
+        '            <div class="modal-content">\n' +
+        '                <div class="modal-body">\n' +
+        '                    <ul class="list-group">' +  generateListOfPeopleWhoLikesPost(post) + '</ul>\n' +
+        '                </div>\n' +
+        '                <div class="modal-footer">\n' +
+        '                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\n' +
+        '                </div>\n' +
+        '            </div>\n' +
+        '        </div>\n' +
+        '    </div>';
+}
+
+function generateListOfPeopleWhoLikesPost(post) {
+    let html = '';
+    for (let index in post['likes'])
+        html += generatePersonWhoLikedPost(post['likes'][index]);
+    return html;
+}
+
+function generatePersonWhoLikedPost(like) {
+    return '<li class="list-group-item"><img class="img-responsive" width="30" height="30" src="' + like['user']['profilePicturePath'] +'"/><span> ' + like['user']['firstname'] + ' ' +  like['user']['lastname'] + '</span></li>';
 }
 
 function isUsersPosts(post, user) {
@@ -108,6 +142,9 @@ function createPost(post, user) {
         '          <div class="col-3">\n' +
         '             <span><i ' + (!usersPost ? generateLikeOnClickEven(post, user) : '') + ' ' + (!usersPost ? 'style="cursor:pointer;"' : '') + ' class="' + (hasBeenLiked && !usersPost ? 'text-dark' : '') + ' fas fa-thumbs-up"></i> ' + post['likes'].length + '</span>\n' +
         '          </div>\n' +
+        '          <div class="col-9">\n' +
+        '             <span style="cursor: pointer;" data-toggle="modal" data-target="#' + post['id'] + 'Modal"><i class="fa fa-list" aria-hidden="true"></i> Show list of people</span>\n' +
+        '          </div>\n' +
         '         </div>'+
         '      </div>\n' +
         '    </div>';
@@ -142,9 +179,14 @@ function fetchAnnouncements() {
                 return;
             let posts = JSON.parse(response.responseText);
             let html = '';
-            for (let index in posts)
+            let modals = '';
+
+            for (let index in posts) {
                 html += createPost(posts[index], posts[index]['user']);
+                modals += createPopUpOfPeopleWhoLikedPost(posts[index]);
+            }
             $('#announcements').html(html);
+            $('#modals').html(modals);
         }
     });
 }

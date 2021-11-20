@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static java.time.LocalDateTime.now;
 
@@ -31,6 +32,9 @@ public class Post {
     String content;
 
     private LocalDateTime postedAt;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private List<Like> likes;
 
     public Post(User user, String content, PostType postType) {
         this.content = content;

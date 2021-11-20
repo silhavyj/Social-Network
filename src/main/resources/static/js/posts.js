@@ -29,7 +29,7 @@ function fetchUsersPosts() {
             let posts = JSON.parse(response.responseText);
             let html = '';
             for (let index in posts)
-                html += createPost(posts[index]);
+                html += createPost(posts[index], posts[index]['user']);
             $('#posts').html(html);
         }
     });
@@ -49,16 +49,39 @@ function fetchLatestPosts() {
         complete: function(response) {
             if (response.status != 200)
                 return;
-            let posts = JSON.parse(response.responseText);
+            console.log(response);
+            let posts = JSON.parse(response.responseText)['posts'];
+            let user = JSON.parse(response.responseText)['user'];
             let html = '';
             for (let index in posts)
-                html += createPost(posts[index]);
+                html += createPost(posts[index], user);
             $('#posts').html(html);
         }
     });
 }
 
-function createPost(post) {
+function isUsersPosts(post, user) {
+    return post['user']['email'] == user['email'];
+}
+
+function hasUserAlreadyLiked(likes, user) {
+    for (let i in likes) {
+        if (likes[i]['user']['email'] == user['email'])
+            return true;
+    }
+    return false;
+}
+
+function generateLikeOnClickEven(post, user) {
+    if (hasUserAlreadyLiked(post['likes'], user))
+        return 'onclick="unlikePost(' + post['id'] + ')"';
+    return 'onclick="likePost(' + post['id'] + ')"';
+}
+
+function createPost(post, user) {
+    const usersPost = isUsersPosts(post, user);
+    const hasBeenLiked = hasUserAlreadyLiked(post['likes'], user);
+
     return '    <div class="card mt-4 text-dark ' + (post['postType'] == "ANNOUNCEMENT" ? "border-primary " : " ") + 'mb-3" style="width: 70%; margin: auto">\n' +
         '      <div class="card-header">\n' +
         '        <div class="container">\n' +
@@ -81,8 +104,33 @@ function createPost(post) {
         '        <p class="card-text">' + post['content'] + '</p>\n' +
         '      </div>\n' +
         '      <div class="card-footer text-muted">\n' +
+        '        <div class="row">\n' +
+        '          <div class="col-3">\n' +
+        '             <span><i ' + (!usersPost ? generateLikeOnClickEven(post, user) : '') + ' ' + (!usersPost ? 'style="cursor:pointer;"' : '') + ' class="' + (hasBeenLiked && !usersPost ? 'text-dark' : '') + ' fas fa-thumbs-up"></i> ' + post['likes'].length + '</span>\n' +
+        '          </div>\n' +
+        '         </div>'+
         '      </div>\n' +
         '    </div>';
+}
+
+function likePost(postId) {
+    $.ajax({
+        type: "POST",
+        url: "/posts/" + postId + "/likes",
+        complete: function(response) {
+            location.reload();
+        }
+    });
+}
+
+function unlikePost(postId) {
+    $.ajax({
+        type: "DELETE",
+        url: "/posts/" + postId + "/likes",
+        complete: function(response) {
+            location.reload();
+        }
+    });
 }
 
 function fetchAnnouncements() {
@@ -95,7 +143,7 @@ function fetchAnnouncements() {
             let posts = JSON.parse(response.responseText);
             let html = '';
             for (let index in posts)
-                html += createPost(posts[index]);
+                html += createPost(posts[index], posts[index]['user']);
             $('#announcements').html(html);
         }
     });

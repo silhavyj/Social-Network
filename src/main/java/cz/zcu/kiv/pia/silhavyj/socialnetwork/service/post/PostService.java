@@ -1,8 +1,10 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.service.post;
 
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.config.AppConfiguration;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.post.Like;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.post.Post;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
+import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.ILikeRepository;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.IPostRepository;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.friendship.IFriendshipService;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IUserService;
@@ -14,6 +16,7 @@ import javax.transaction.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.post.PostType.ANNOUNCEMENT;
@@ -28,6 +31,7 @@ public class PostService implements IPostService {
     private final AppConfiguration appConfiguration;
     private final IFriendshipService friendshipService;
     private final IUserService userService;
+    private final ILikeRepository likeRepository;
 
     @Override
     public void createPost(User user, String message) {
@@ -66,5 +70,42 @@ public class PostService implements IPostService {
     @Override
     public List<Post> getUsersAnnouncements(String userEmail) {
         return postRepository.findTopUsersAnnouncements(userEmail, PageRequest.of(0, appConfiguration.getPostsToDisplayOnProfilePage()));
+    }
+
+    @Override
+    public void likePost(long postId, User sessionUser) {
+        Optional<Post> post = Optional.of(postRepository.getById(postId));
+        if (post.isEmpty())
+            return;
+
+        boolean alreadyLiked = post.get().getLikes()
+                .stream()
+                .filter(like -> like.getUser().getEmail().equals(sessionUser.getEmail()))
+                .findFirst()
+                .isPresent();
+
+        if (alreadyLiked == true || post.get().getUser().getEmail().equals(sessionUser.getEmail()))
+            return;
+
+        post.get().getLikes().add(new Like(sessionUser));
+        postRepository.save(post.get());
+    }
+
+    @Override
+    public void unlikePost(long postId, User sessionUser) {
+        Optional<Post> post = Optional.of(postRepository.getById(postId));
+        if (post.isEmpty())
+            return;
+
+        Optional<Like> likeToDelete = post.get().getLikes()
+                        .stream()
+                        .filter(like -> like.getUser().getEmail().equals(sessionUser.getEmail()))
+                        .findFirst();
+
+        if (likeToDelete.isPresent()) {
+            post.get().getLikes().removeIf(like -> like.getUser().getEmail().equals(sessionUser.getEmail()));
+            postRepository.save(post.get());
+            likeRepository.delete(likeToDelete.get());
+        }
     }
 }

@@ -12,4 +12,6 @@ public interface IPostService {
     List<Post> getMainPagePosts(User user);
     void createAnnouncement(User user, String message);
     List<Post> getUsersAnnouncements(String userEmail);
+    void likePost(long postId, User sessionUser);
+    void unlikePost(long postId, User sessionUser);
 }

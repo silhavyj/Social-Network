@@ -13,6 +13,7 @@ public interface IFriendshipService {
     List<SearchedUser> getAllAcceptedFriendsAdmins(User sessionUser);
     List<SearchedUser> getAllAcceptedFriendsNotAdmins(User sessionUser);
     List<SearchedUser> getAllAcceptedFriends(User sessionUser);
+    List<User> getAllAcceptedFriends(String userEmail);
     List<SearchedUser> getAllPendingFriends(User sessionUser);
     List<User> getAllReceivedPendingFriends(User sessionUser);
     List<User> getAllSentPendingFriends(User sessionUser);

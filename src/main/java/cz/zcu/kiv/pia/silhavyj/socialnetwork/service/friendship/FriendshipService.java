@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,6 +60,20 @@ public class FriendshipService implements IFriendshipService {
     public List<SearchedUser> getAllAcceptedFriends(User sessionUser) {
         var acceptedRequests = friendRequestRepository.findFriendRequestByStatus(ACCEPTED, sessionUser.getEmail());
         return mapFriendRequestsOntoSearchedUsers(acceptedRequests, sessionUser.getEmail());
+    }
+
+    @Override
+    public List<User> getAllAcceptedFriends(String userEmail) {
+        var acceptedRequests = friendRequestRepository.findFriendRequestByStatus(ACCEPTED, userEmail);
+        List<User> friends = new ArrayList<>();
+        for (var friendRequest : acceptedRequests) {
+            if (friendRequest.getRequestReceiver().getEmail().equals(userEmail)) {
+                friends.add(friendRequest.getRequestSender());
+            } else {
+                friends.add(friendRequest.getRequestReceiver());
+            }
+        }
+        return friends;
     }
 
     @Override

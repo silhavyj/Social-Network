@@ -91,7 +91,7 @@ function generateListOfPeopleWhoLikesPost(post) {
 }
 
 function generatePersonWhoLikedPost(like) {
-    return '<li class="list-group-item"><img class="img-responsive" width="30" height="30" src="' + like['user']['profilePicturePath'] +'"/><span> ' + like['user']['firstname'] + ' ' +  like['user']['lastname'] + '</span></li>';
+    return '<li class="list-group-item"><img class="img-responsive rounded-circle" width="30" height="30" src="' + like['user']['profilePicturePath'] +'"/><span> ' + like['user']['firstname'] + ' ' +  like['user']['lastname'] + '</span></li>';
 }
 
 function isUsersPosts(post, user) {
@@ -121,7 +121,7 @@ function createPost(post, user) {
         '        <div class="container">\n' +
         '          <div class="row">\n' +
         '            <div class="col-3">\n' +
-        '              <img src="' + post['user']['profilePicturePath'] + '" class="img-responsive" width="70" height="70">\n' +
+        '              <img src="' + post['user']['profilePicturePath'] + '" class="img-responsive rounded-circle" width="70" height="70">\n' +
         '            </div>\n' +
         '            <div class="col-9">\n' +
         '              <div class="row">\n' +

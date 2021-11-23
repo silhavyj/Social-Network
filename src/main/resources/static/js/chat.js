@@ -65,15 +65,14 @@ function openChatWindow(userEmail) {
     const messagesContainer = document.getElementById('messages-container');
     messagesContainer.innerHTML = '';
     const conversation = messages.get(userEmail);
-    console.log('BBBB ' + conversation);
     for (let index in conversation) {
-        console.log('AAAA ' + conversation[index]);
         messagesContainer.innerHTML += renderMessage(conversation[index]);
     }
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
 function renderMessage(message) {
+    message = JSON.parse(message);
     if (message['messageType'] === 'MESSAGE') {
         return ' ' +
             '<div class="row">\n' +
@@ -110,10 +109,10 @@ function sendMessage() {
     let conversation = messages.get(selectedFriend);
     if (conversation == null)
         conversation = []
-    conversation.push({
+    conversation.push(JSON.stringify({
         messageType: 'SENT',
         message: message
-    });
+    }));
     messages.set(selectedFriend, conversation);
 
     stompClient.send("/app/chat/" + selectedFriend, {}, JSON.stringify({
@@ -137,12 +136,12 @@ function receivedMessage(data) {
         unreadMessagesSpan.style.display = "block";
         unreadMessagesSpan.innerHTML = unreadMessages;
     }
-    let conversation = messages.get(selectedFriend);
+    let conversation = messages.get(data['senderEmail']);
     if (conversation == null)
         conversation = []
+    conversation.push(JSON.stringify(data));
+    messages.set(data['senderEmail'], conversation);
 
-    conversation.push(data);
-    messages.set(selectedFriend, conversation);
     const messagesContainer = document.getElementById('messages-container');
     messagesContainer.innerHTML += renderMessage(conversation[conversation.length - 1]);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;

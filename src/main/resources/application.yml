@@ -46,7 +46,7 @@ application:
   resetpasswordexpirationtime: 5                         # when resetting a password, the user has 5 mins to do so until the token expires
   poststodisplayonprofilepage: 10                        # number of posts to be shown on the profile page
 
-  users:                                                 # default users that will be added to the database
+  users:                                                 # default users that will be added to the databasehttp://localhost:8080/#
     -                                                    # automatically when the application starts
       firstname: user1
       lastname: user1

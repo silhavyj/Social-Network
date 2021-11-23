@@ -32,7 +32,10 @@
       <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-user"></i> <span th:text="${session_user.getFirstname()}"></span>
+            <img th:src="${session_user.getProfilePicturePath()}" class="img-responsive rounded-circle" width="30" height="30"/>
+            &nbsp
+            <span th:text="${session_user.getFirstname()}"></span>
+            <span id="session-user-email" style="display: none;" th:text="${session_user.getEmail()}"></span>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" th:href="@{/}">Home</a>

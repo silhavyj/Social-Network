@@ -142,7 +142,9 @@ function receivedMessage(data) {
     conversation.push(JSON.stringify(data));
     messages.set(data['senderEmail'], conversation);
 
-    const messagesContainer = document.getElementById('messages-container');
-    messagesContainer.innerHTML += renderMessage(conversation[conversation.length - 1]);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    if (selectedFriend == data['senderEmail']) {
+        const messagesContainer = document.getElementById('messages-container');
+        messagesContainer.innerHTML += renderMessage(conversation[conversation.length - 1]);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
 }

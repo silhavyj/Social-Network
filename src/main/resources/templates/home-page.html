@@ -9,6 +9,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="/js/posts.js"></script>
     <script src="/js/chat.js"></script>
+
+    <link rel="stylesheet" href="/css/chat-window.css">
+    <script src="/js/chat-window.js"></script>
 </head>
 <body onload="setFetchPostsTimer(); connectToChat();">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -73,6 +76,44 @@
     </div>
 
     <div id="modals"></div>
+
+    <button class="btn btn-dark open-button" onclick="openForm()">Chat</button>
+    <div class="chat-popup" id="myForm">
+        <div class="form-container">
+            <div class="container m-2">
+                <div class="row">
+                    <img src="images/default_user_picture.png" class="img-responsive rounded-circle mr-3" width="50" height="50">
+                    <h4>user1 user1</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="container container-messages">
+                <div class="row">
+                    <div class="container">
+                        <div class="row">
+                            <img src="images/default_user_picture.png" class="img-responsive rounded-circle mr-3" width="30" height="30">
+                            <p class="p-2 bg-dark text-white outcoming-message">Hey, how's it going?</p>
+                        </div>
+                        <div class="row">
+                            <p class="text-secondary message-timestamp">15. 9. 2015</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="container">
+                        <p class="p-2 bg-light text-dark incoming-message">Not too bad. What about you? aaaa aa aaaaa aaaa aaaa aasdad</p>
+                    </div>
+                    <div class="container">
+                        <p class="text-secondary message-timestamp message-timestamp-right">15. 9. 2015</p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <textarea placeholder="Type message.." name="msg" required></textarea>
+            <button type="submit" class="btn btn-dark">Send</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </div>
+    </div>
 
     <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

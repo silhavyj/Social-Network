@@ -23,8 +23,9 @@ function createOnlineFriend(data) {
         '<li class="list-group-item" id="online-friend-' + data['email'] + '">\n' +
         '    <div>\n' +
         '     <i style="color: green;" class="fas fa-circle fa-xs"></i>\n' +
-        '        <img src="' + data['profilePicturePath'] + ' " class="img-responsive rounded-circle" width="30" height="30"/>\n' +
+        '        <img src="' + data['profilePicturePath'] + ' " class="img-responsive rounded-circle" width="35" height="35"/>\n' +
         '        <span>' + data['fullName'] + '</span>\n' +
+        '        <span class="circle">1</span>' +
         '    </div>\n' +
         '</li>';
     $("#online-friends").append(onlineUser);

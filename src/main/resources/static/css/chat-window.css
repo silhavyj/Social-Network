@@ -1,0 +1,82 @@
+/* Button used to open the chat form - fixed at the bottom of the page */
+.open-button {
+    position: fixed;
+    bottom: 23px;
+    right: 28px;
+    width: 200px;
+}
+
+/* The popup chat - hidden by default */
+.chat-popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-container {
+    width: 500px;
+    padding: 10px;
+    background-color: white;
+}
+
+/* Full-width textarea */
+.form-container textarea {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+    resize: none;
+    min-height: 25px;
+}
+
+.container-messages {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 350px;
+}
+
+.message {
+    max-width: 70%;
+    display: block;
+    word-wrap: break-word;
+}
+
+.incoming-message {
+    border-radius: 10px;
+    max-width: 70%;
+    float: right;
+}
+
+.outcoming-message {
+    border-radius: 10px;
+    max-width: 70%;
+    display: block;
+    word-wrap: break-word;
+}
+
+.message-timestamp {
+    font-size: 0.8rem;
+}
+
+.message-timestamp-right {
+    text-align: right;
+}
+
+.circle {
+    background: red;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    color:  white;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 25px;
+    margin-right: 5px;
+    text-align: center;
+    width: 25px;
+}

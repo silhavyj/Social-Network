@@ -55,6 +55,7 @@ application:
       dob: "2006-10-27"
       role: USER
       gender: MALE
+      profilepicturepath: images/profile_pic1.png
 
     -
       firstname: user2
@@ -63,6 +64,8 @@ application:
       email: user2@silhavyj.pia.kiv.zcu.cz
       dob: "1998-04-09"
       role: USER
+      gender: MALE
+      profilepicturepath: images/profile_pic2.png
 
     -
       firstname: user3
@@ -71,6 +74,8 @@ application:
       email: user3@silhavyj.pia.kiv.zcu.cz
       dob: "1994-04-10"
       role: USER
+      gender: FEMALE
+      profilepicturepath: images/profile_pic3.pnghttp://localhost:8080/images/profile_pic1.png
 
     - firstname: admin
       lastname: admin
@@ -78,3 +83,5 @@ application:
       email: admin@silhavyj.pia.kiv.zcu.cz
       dob: "1994-04-15"
       role: ADMIN
+      gender: MALE
+      profilepicturepath: images/profile_pic4.png

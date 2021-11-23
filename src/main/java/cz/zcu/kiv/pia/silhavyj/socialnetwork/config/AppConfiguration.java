@@ -46,6 +46,7 @@ public class AppConfiguration {
         private String role;
         private String dob;
         private Gender gender = UNDEFINED;
+        private String profilePicturePath;
 
         public User buildUser() {
             User user = new User();
@@ -56,6 +57,7 @@ public class AppConfiguration {
             user.setPassword(password);
             user.setGender(gender);
             user.setDob(LocalDate.parse(dob));
+            user.setProfilePicturePath(profilePicturePath);
 
             user.setEnabled(true);
             return user;

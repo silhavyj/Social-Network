@@ -28,6 +28,9 @@ public class ChatController {
     public void sendMessage(@DestinationVariable String receiver, Message message,
                             @CurrentSecurityContext(expression="authentication") Authentication authentication) {
 
+        if (message.getMessage() == null || message.getMessage().trim().length() == 0)
+            return;
+
         String email = authentication.getName();
         User sessionUser = userService.getUserByEmail(email).get();
         Optional<User> toUser = userService.getUserByEmail(receiver);

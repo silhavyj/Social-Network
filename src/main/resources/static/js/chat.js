@@ -102,7 +102,7 @@ function renderMessage(message) {
 
 function sendMessage() {
     const message = $('#message-input').val();
-    if (message === "")
+    if (message.trim().length == 0)
         return;
     $('#message-input').val("");
 

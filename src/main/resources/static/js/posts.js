@@ -1,6 +1,6 @@
 function submit_post() {
     const content = $('#new-post-content').val();
-    if (content === "")
+    if (content.trim().length == 0)
         return;
     $('#new-post-content').val('');
 
@@ -193,7 +193,7 @@ function fetchAnnouncements() {
 
 function submit_announcement() {
     const content = $('#new-announcement-content').val();
-    if (content === "")
+    if (content.trim().length == 0)
         return;
 
     $('#new-post-content').val('');

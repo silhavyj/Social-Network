@@ -77,7 +77,8 @@ application:
       gender: FEMALE
       profilepicturepath: images/profile_pic3.png
 
-    - firstname: admin
+    -
+      firstname: admin
       lastname: admin
       password: Admin123*
       email: admin@silhavyj.pia.kiv.zcu.cz

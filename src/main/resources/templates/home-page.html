@@ -9,9 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="/js/posts.js"></script>
     <script src="/js/chat.js"></script>
-
     <link rel="stylesheet" href="/css/chat-window.css">
-    <script src="/js/chat-window.js"></script>
 </head>
 <body onload="setFetchPostsTimer(); connectToChat();">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -77,17 +75,16 @@
 
     <div id="modals"></div>
 
-    <button class="btn btn-dark open-button" onclick="openForm()">Chat</button>
-    <div class="chat-popup" id="myForm">
+    <div class="chat-popup" id="chat-window">
         <div class="form-container">
             <div class="container m-2">
                 <div class="row">
-                    <img src="images/default_user_picture.png" class="img-responsive rounded-circle mr-3" width="50" height="50">
-                    <h4>user1 user1</h4>
+                    <img id="chat-window-profile-pic" src="images/default_user_picture.png" class="img-responsive rounded-circle mr-3" width="50" height="50">
+                    <h4 id="chat-window-username">user1 user1</h4>
                 </div>
             </div>
             <hr>
-            <div class="container container-messages">
+            <div class="container container-messages" id="messages-container">
                 <div class="row">
                     <div class="container">
                         <div class="row">
@@ -109,8 +106,8 @@
                 </div>
             </div>
             <hr>
-            <textarea placeholder="Type message.." name="msg" required></textarea>
-            <button type="submit" class="btn btn-dark">Send</button>
+            <textarea id="message-input" placeholder="Type message.." name="msg" required></textarea>
+            <button type="submit" class="btn btn-dark" onclick="sendMessage()">Send</button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
         </div>
     </div>

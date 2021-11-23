@@ -75,7 +75,7 @@ application:
       dob: "1994-04-10"
       role: USER
       gender: FEMALE
-      profilepicturepath: images/profile_pic3.pnghttp://localhost:8080/images/profile_pic1.png
+      profilepicturepath: images/profile_pic3.png
 
     - firstname: admin
       lastname: admin

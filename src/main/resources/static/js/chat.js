@@ -133,7 +133,7 @@ function receivedMessage(data) {
         const unreadMessagesSpan = document.getElementById(unreadMessagesId);
         let unreadMessages = parseInt(unreadMessagesSpan.innerHTML);
         unreadMessages++;
-        unreadMessagesSpan.style.display = "block";
+        unreadMessagesSpan.style.display = "inline-block";
         unreadMessagesSpan.innerHTML = unreadMessages;
     }
     let conversation = messages.get(data['senderEmail']);

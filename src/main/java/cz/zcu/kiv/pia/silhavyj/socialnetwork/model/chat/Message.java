@@ -7,10 +7,11 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class OnlineUser {
+public class Message {
 
-    private String fullName;
-    private String email;
-    private OnlineUserStatus onlineUserStatus;
+    private String senderFullName;
+    private String senderEmail;
     private String profilePicturePath;
+    private MessageType messageType;
+    private String message;
 }

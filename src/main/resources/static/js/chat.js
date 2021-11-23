@@ -6,12 +6,14 @@ function connectToChat() {
     var socket = new SockJS("http://localhost:8080/ws");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function () {
-        stompClient.subscribe('/topic/online/' + sessionUserEmail, function (frame) {
+        stompClient.subscribe('/topic/chat/' + sessionUserEmail, function (frame) {
             let data = JSON.parse(frame.body);
-            if (data['onlineUserStatus'] == 'ONLINE') {
+            if (data['messageType'] == 'USER_ONLINE') {
                 createOnlineFriend(data);
-            } else {
+            } else if (data['messageType'] == 'USER_OFFLINE') {
                 deleteOnlineFriend(data);
+            } else if (data['messageType'] == 'MESSAGE') {
+
             }
             console.log(data);
         });

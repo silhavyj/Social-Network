@@ -1,5 +1,11 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.constant;
 
+/***
+ * Constants related to Friendships. These messages are used in situations such as searching users,
+ * sending friend requests, accepting friend requests, blocking users, etc.
+ *
+ * @author Jakub Silhavy (A21N0072P)
+ */
 public class FriendshipConstants {
 
     public static final String TOO_SHORT_NAME_TO_SEARCH_ERR_MSG = "At least 3 letters must be provided when searching a person";

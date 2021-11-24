@@ -7,7 +7,7 @@ spring:
   datasource:                                             # connection to the database
     username: postgres                                    # user
     password: password                                    # password
-    url: jdbc:postgresql://localhost:5432/pia-silhavyj    # the database is running in a Docker container
+    url: jdbc:postgresql://10.5.0.5:5432/pia-silhavyj     # the database is running in a Docker container
                                                           # with port 5432 exposed to the local machine
   jpa:
     hibernate:
@@ -22,7 +22,7 @@ spring:
     show-sql: true
 
   mail:
-    host: localhost                                       # the mail server is running in a Docker container
+    host: 10.5.0.6                                        # the mail server is running in a Docker container
     port: 25                                              # with post 25 exposed to the local machine
     username: admin                                       # username
     password: 123                                         # password
@@ -46,7 +46,7 @@ application:
   resetpasswordexpirationtime: 5                         # when resetting a password, the user has 5 mins to do so until the token expires
   poststodisplayonprofilepage: 10                        # number of posts to be shown on the profile page
 
-  users:                                                 # default users that will be added to the databasehttp://localhost:8080/#
+  users:                                                 # default users that will be added to the database
     -                                                    # automatically when the application starts
       firstname: user1
       lastname: user1

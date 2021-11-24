@@ -6,6 +6,9 @@ services:
   db:                               # PostgreSQL database
     image: postgres:alpine          # docker image (https://hub.docker.com/_/postgres)
     restart: always                 # always restart the db when the app restarts
+    networks:                       # specify the IP address of the database
+      kiv-pia-silhavyj-network:
+        ipv4_address: 10.5.0.5
     environment:
       - POSTGRES_DB=pia-silhavyj    # database name
       - POSTGRES_USER=postgres      # database "root" user
@@ -17,8 +20,29 @@ services:
   mail:                             # email server (can be replaced with gmail later on)
     image: maildev/maildev          # docker image (https://hub.docker.com/r/maildev/maildev)
     restart: always                 # always restart the server when the app restarts
+    networks:                       # specify the IP address of the mail server
+      kiv-pia-silhavyj-network:
+        ipv4_address: 10.5.0.6
     ports:
       - "25:25"                     # expose port 25 (SMTP) out of the docker container to the local machine
       - "80:80"                     # expose port 80 (HTTP - web UI) out of the docker container to the local machine
     environment:
       - "TZ=Europe/Prague"          # timezone
+
+  app:                              # Spring boot application
+    build: .
+    ports:
+      - "8080:8080"                 # expose port 8080 (web interface) out of the docker container do the local machine
+    networks:
+      kiv-pia-silhavyj-network:     # specify the IP address of the application
+        ipv4_address: 10.5.0.7
+    depends_on:
+      - db
+      - mail
+
+networks:                           # definition of the subnet within Docker
+  kiv-pia-silhavyj-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16

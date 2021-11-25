@@ -33,6 +33,8 @@ services:
     build: .
     ports:
       - "8080:8080"                 # expose port 8080 (web interface) out of the docker container do the local machine
+    environment:
+      - "TZ=Europe/Prague"          # timezone
     networks:
       kiv-pia-silhavyj-network:     # specify the IP address of the application
         ipv4_address: 10.5.0.7

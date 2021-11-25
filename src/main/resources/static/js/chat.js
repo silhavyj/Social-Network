@@ -74,6 +74,11 @@ function openChatWindow(userEmail) {
 function renderMessage(message) {
     message = JSON.parse(message);
     if (message['messageType'] === 'MESSAGE') {
+        const parts = message['timeStamp'].split('T');
+        const part1 = parts[0].split('-');
+        const part2 = parts[1].split('.')[0];
+        const timeStamp = part1[0] + '/' + part1[1] + '/' + part1[2] + ' ' + part2;
+
         return ' ' +
             '<div class="row">\n' +
             '    <div class="container">\n' +
@@ -82,7 +87,7 @@ function renderMessage(message) {
             '             <p class="p-2 bg-dark text-white outcoming-message">' + message['message'] + '</p>\n' +
             '        </div>\n' +
             '        <div class="row">\n' +
-            '            <p class="text-secondary message-timestamp">15. 9. 2015</p>\n' +
+            '            <p class="text-secondary message-timestamp">' + timeStamp + '</p>\n' +
             '        </div>\n' +
             '    </div>\n' +
             '</div>';
@@ -93,11 +98,38 @@ function renderMessage(message) {
             '         <p class="p-2 bg-light text-dark incoming-message">' + message['message'] + '</p>\n' +
             '    </div>\n' +
             '    <div class="container">\n' +
-            '         <p class="text-secondary message-timestamp message-timestamp-right">15. 9. 2015</p>\n' +
+            '         <p class="text-secondary message-timestamp message-timestamp-right">' + message['timeStamp'] + '</p>\n' +
             '    </div>\n' +
             '</div>';
     }
     return '';
+}
+
+function getDateTime() {
+    let now     = new Date();
+    let year    = now.getFullYear();
+    let month   = now.getMonth()+1;
+    let day     = now.getDate();
+    let hour    = now.getHours();
+    let minute  = now.getMinutes();
+    let second  = now.getSeconds();
+    if (month.toString().length == 1) {
+        month = '0'+month;
+    }
+    if (day.toString().length == 1) {
+        day = '0'+day;
+    }
+    if (hour.toString().length == 1) {
+        hour = '0'+hour;
+    }
+    if (minute.toString().length == 1) {
+        minute = '0'+minute;
+    }
+    if (second.toString().length == 1) {
+        second = '0'+second;
+    }
+    const dateTime = year+'/'+month+'/'+day+' '+hour+':'+minute+':'+second;
+    return dateTime;
 }
 
 function sendMessage() {
@@ -109,9 +141,12 @@ function sendMessage() {
     let conversation = messages.get(selectedFriend);
     if (conversation == null)
         conversation = []
+
+    let timeStamp = getDateTime();
     conversation.push(JSON.stringify({
         messageType: 'SENT',
-        message: message
+        message: message,
+        timeStamp: timeStamp
     }));
     messages.set(selectedFriend, conversation);
 

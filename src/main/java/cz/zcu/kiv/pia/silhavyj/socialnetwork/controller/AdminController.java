@@ -77,18 +77,21 @@ public class AdminController {
 
         // Make sure that the user who sent the request already has the Admin role.
         Role adminRole = roleService.getRoleByUserRole(ADMIN).get();
-        if (sessionUser.getRoles().contains(adminRole) == false)
+        if (sessionUser.getRoles().contains(adminRole) == false) {
             return ResponseEntity.badRequest().body(MISSING_ADMIN_PRIVILEGES_ERR_MSG);
+        }
 
         // Make sure that the user who sent the request and the user who is about to become an Admin are friends.
         // This also validates the existence of the user in the system.
-        if (friendshipService.isFriend(email, sessionUser) == false)
+        if (friendshipService.isFriend(email, sessionUser) == false) {
             return ResponseEntity.badRequest().body(CANNOT_CHANGE_PRIVILEGES_ERR_MSG);
+        }
 
         // Make sure the user who is about to become an Admin doesn't already have Admin privileges.
         User user = userService.getUserByEmail(email).get();
-        if (user.getRoles().contains(adminRole) == true)
+        if (user.getRoles().contains(adminRole) == true) {
             return ResponseEntity.badRequest().body(ADMIN_PRIVILEGES_ALREADY_ASSIGNED_ERR_MSG);
+        }
 
         // Make the user an Admin.
         userService.escalateToAdmin(email);
@@ -111,18 +114,21 @@ public class AdminController {
 
         // Make sure that the user who sent the request already has the Admin role.
         Role adminRole = roleService.getRoleByUserRole(ADMIN).get();
-        if (sessionUser.getRoles().contains(adminRole) == false)
+        if (sessionUser.getRoles().contains(adminRole) == false) {
             return ResponseEntity.badRequest().body(MISSING_ADMIN_PRIVILEGES_ERR_MSG);
+        }
 
         // Make sure that the user who sent the request and the user who is about to be removed Admin privileges are friends.
         // This also validates the existence of the user in the system.
-        if (friendshipService.isFriend(email, sessionUser) == false)
+        if (friendshipService.isFriend(email, sessionUser) == false) {
             return ResponseEntity.badRequest().body(CANNOT_CHANGE_PRIVILEGES_ERR_MSG);
+        }
 
         // Make sure that the user is indeed an Admin (otherwise there's nothing to remove).
         User user = userService.getUserByEmail(email).get();
-        if (user.getRoles().contains(adminRole) == false)
+        if (user.getRoles().contains(adminRole) == false) {
             return ResponseEntity.badRequest().body(USER_HAS_NO_ADMIN_PRIVILEGES_ERR_MSG);
+        }
 
         // Remove the admin role from the user.
         userService.removeAdminPrivileges(email);

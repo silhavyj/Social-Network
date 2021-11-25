@@ -14,4 +14,12 @@ public class Message {
     private String profilePicturePath;
     private MessageType messageType;
     private String message;
+    private String timeStamp;
+
+    public Message(String senderFullName, String senderEmail, String profilePicturePath, MessageType messageType) {
+        this.senderFullName = senderFullName;
+        this.senderEmail = senderEmail;
+        this.profilePicturePath = profilePicturePath;
+        this.messageType = messageType;
+    }
 }

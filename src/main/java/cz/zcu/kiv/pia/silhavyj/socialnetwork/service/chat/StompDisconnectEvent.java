@@ -32,9 +32,9 @@ public class StompDisconnectEvent implements ApplicationListener<SessionDisconne
 
         var friends = friendshipService.getAllAcceptedFriends(userEmail);
         for (var friend : friends) {
-            simpMessagingTemplate.convertAndSend("/topic/messages/" + friend.getEmail(), new Message(user.getFullName(), user.getEmail(), user.getProfilePicturePath(), USER_OFFLINE, ""));
+            simpMessagingTemplate.convertAndSend("/topic/messages/" + friend.getEmail(), new Message(user.getFullName(), user.getEmail(), user.getProfilePicturePath(), USER_OFFLINE));
             if (onlinePeopleStorage.getOnlinePeople().contains(friend.getEmail())) {
-                simpMessagingTemplate.convertAndSend("/topic/messages/" + userEmail, new Message(friend.getFullName(), friend.getEmail(), friend.getProfilePicturePath(), USER_OFFLINE, ""));
+                simpMessagingTemplate.convertAndSend("/topic/messages/" + userEmail, new Message(friend.getFullName(), friend.getEmail(), friend.getProfilePicturePath(), USER_OFFLINE));
             }
         }
     }

@@ -32,9 +32,9 @@ public class StompSubscribedEvent implements ApplicationListener<SessionSubscrib
 
         var friends = friendshipService.getAllAcceptedFriends(userEmail);
         for (var friend : friends) {
-            simpMessagingTemplate.convertAndSend("/topic/messages/" + friend.getEmail(), new Message(user.getFullName(), user.getEmail(), user.getProfilePicturePath(), USER_ONLINE, ""));
+            simpMessagingTemplate.convertAndSend("/topic/messages/" + friend.getEmail(), new Message(user.getFullName(), user.getEmail(), user.getProfilePicturePath(), USER_ONLINE));
             if (onlinePeopleStorage.getOnlinePeople().contains(friend.getEmail())) {
-                simpMessagingTemplate.convertAndSend("/topic/messages/" + userEmail, new Message(friend.getFullName(), friend.getEmail(), friend.getProfilePicturePath(), USER_ONLINE, ""));
+                simpMessagingTemplate.convertAndSend("/topic/messages/" + userEmail, new Message(friend.getFullName(), friend.getEmail(), friend.getProfilePicturePath(), USER_ONLINE));
             }
         }
     }

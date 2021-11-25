@@ -21,7 +21,7 @@ import static cz.zcu.kiv.pia.silhavyj.socialnetwork.constant.FriendshipConstants
 import static cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole.ADMIN;
 
 /***
- * Controller user for managing friend requests, blocking users, or deleting friends.
+ * Controller used for managing friend requests, blocking users, or deleting friends.
  *
  * GET    /people                  - returns people page
  * GET    /people/name             - returns a list of searched users (min 3 letters need to be provided)
@@ -92,8 +92,9 @@ public class FriendshipController {
                                             @PathVariable("name") String name) {
 
         // Make sure that the user has provided enough information to search users (min 3 letters required).
-        if (name == null || name.length() < appConfiguration.getSearchNameMinLen())
+        if (name == null || name.length() < appConfiguration.getSearchNameMinLen()) {
             return ResponseEntity.badRequest().body(TOO_SHORT_NAME_TO_SEARCH_ERR_MSG);
+        }
 
         // Get the session user (who sent the request).
         String email = authentication.getName();
@@ -119,16 +120,19 @@ public class FriendshipController {
 
         // Make sure that the user who will be sent a friend request indeed exists in the database.
         Optional<User> receiver = userService.getUserByEmail(email);
-        if (receiver.isEmpty())
+        if (receiver.isEmpty()) {
             return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
+        }
 
         // Make sure that the receiving user has not been blocked by the sending user.
-        if (friendshipService.isFriendshipBlocked(email, sessionUser.getEmail()))
+        if (friendshipService.isFriendshipBlocked(email, sessionUser.getEmail())) {
             return ResponseEntity.badRequest().body(USER_IS_BLOCKED_ERR_MSG);
+        }
 
         // Make sure there is not a pending or accepted friend request
-        if (friendshipService.isAlreadyFriendOrPendingFriend(email, sessionUser))
+        if (friendshipService.isAlreadyFriendOrPendingFriend(email, sessionUser)) {
             return ResponseEntity.badRequest().body(FRIEND_REQUEST_ALREADY_SENT);
+        }
 
         // Send a friend request to the user and send a response saying that everything went well.
         friendshipService.sendFriendRequest(receiver.get(), sessionUser);
@@ -150,16 +154,19 @@ public class FriendshipController {
 
         // Make sure that the user who sent the friend request exists within the system.
         Optional<User> sender = userService.getUserByEmail(email);
-        if (sender.isEmpty())
+        if (sender.isEmpty()) {
             return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
+        }
 
         // If the two users are already friend, return an error message.
-        if (friendshipService.isFriend(email, sessionUser) == true)
+        if (friendshipService.isFriend(email, sessionUser) == true) {
             return ResponseEntity.badRequest().body(FRIEND_REQUEST_ALREADY_SENT_ERR_MSG);
+        }
 
         // Make sure that that is a pending request to be accepted.
-        if (friendshipService.isPendingFriend(email, sessionUser) == false)
+        if (friendshipService.isPendingFriend(email, sessionUser) == false) {
             return ResponseEntity.badRequest().body(PENDING_FRIEND_REQUEST_NOT_FOUND_ERR_MSG);
+        }
 
         // Accept the friend request and return a message saying that all went well.
         friendshipService.acceptFriendRequest(sessionUser, sender.get());
@@ -181,12 +188,14 @@ public class FriendshipController {
 
         // Make sure that the user who is going to be removed indeed exists in the database.
         Optional<User> sender = userService.getUserByEmail(email);
-        if (sender.isEmpty())
+        if (sender.isEmpty()) {
             return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
+        }
 
         // Make sure that the two users are already friends (there is an accepted friend request).
-        if (friendshipService.isAlreadyFriendOrPendingFriend(email, sessionUser) == false)
+        if (friendshipService.isAlreadyFriendOrPendingFriend(email, sessionUser) == false) {
             return ResponseEntity.badRequest().body(NO_REQUEST_TO_BE_DELETED_FOUND_ERR_MSG);
+        }
 
         // Delete the user as a friend and return a message saying that all went well.
         friendshipService.deleteFriend(sessionUser, sender.get());
@@ -208,14 +217,16 @@ public class FriendshipController {
 
         // Make sure that the user who is going to be blocked by the session user exists in the database.
         Optional<User> sender = userService.getUserByEmail(email);
-        if (sender.isEmpty())
+        if (sender.isEmpty()) {
             return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
+        }
 
         // Get the pending friend request to be used to block the user.
         // The session user is the received of the friend request - they block the user.
         Optional<FriendRequest> friendRequest = friendshipService.getFriendRequestToBlock(email, sessionUser);
-        if (friendRequest.isEmpty())
+        if (friendRequest.isEmpty()) {
             return ResponseEntity.badRequest().body(NO_PENDING_REQUEST_TO_BE_BLOCKED_FOUND_ERR_MSG);
+        }
 
         // Block the user and return a message saying that all went well.
         friendshipService.blockUser(friendRequest.get());
@@ -237,14 +248,16 @@ public class FriendshipController {
 
         // Make sure that the user who is going to be unblocked exists in the database.
         Optional<User> sender = userService.getUserByEmail(email);
-        if (sender.isEmpty())
+        if (sender.isEmpty()) {
             return ResponseEntity.badRequest().body(USER_NOT_FOUND_ERR_MSG);
+        }
 
         // Get the original friend request that has been blocked.
         // The session user is the received of the friend request.
         Optional<FriendRequest> friendRequest = friendshipService.getBLockedFriendship(sender.get().getEmail(), sessionUserEmail);
-        if (friendRequest.isEmpty())
+        if (friendRequest.isEmpty()) {
             return ResponseEntity.badRequest().body(FRIENDSHIP_CANNOT_BE_UNBLOCKED_ERR_MSG);
+        }
 
         // Unblock the user and send a message saying that all went well.
         friendshipService.deleteFriend(sessionUser, sender.get());

@@ -25,7 +25,7 @@ public class EmailSenderHelper implements IEmailSenderHelper {
         
         Map<String, Object> variables = Stream.of(new String[][] {
                 { "firstname", user.getFirstname() },
-                { "link", createLink(token, "/sign-up/confirm") },
+                { "link", createLink(token, "/sign-up") },
         }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
         
         Context context = new Context();
@@ -54,7 +54,7 @@ public class EmailSenderHelper implements IEmailSenderHelper {
 
         Map<String, Object> variables = Stream.of(new String[][] {
                 { "firstname", user.getFirstname() },
-                { "link", createLink(token, "/reset-password/confirm") },
+                { "link", createLink(token, "/reset-password") },
         }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
 
         Context context = new Context();
@@ -68,7 +68,6 @@ public class EmailSenderHelper implements IEmailSenderHelper {
                 .append(appConfiguration.getUrl())
                 .append(path)
                 .append("/")
-                .append("?token=")
                 .append(token)
                 .toString();
     }

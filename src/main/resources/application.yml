@@ -4,6 +4,10 @@ server:
     include-binding-errors: always                        # it should be turned off when the app is deployed (vulnerability)
 
 spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
   datasource:                                             # connection to the database
     username: postgres                                    # user
     password: password                                    # password

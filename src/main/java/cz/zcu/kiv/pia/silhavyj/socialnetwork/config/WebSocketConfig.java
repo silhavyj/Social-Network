@@ -37,6 +37,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry
             .addEndpoint("/ws")
             .setAllowedOriginPatterns("*")
+            // .setAllowedOrigins("http://10.10.2.103:8085")
             .withSockJS();
     }
 }

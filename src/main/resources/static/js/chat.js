@@ -7,7 +7,7 @@ const messages = new Map();
 
 function connectToChat() {
     sessionUserEmail = $('#session-user-email').text();
-    var socket = new SockJS("http://localhost:8080/ws");
+    var socket = new SockJS("http://localhost:8085/ws");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function () {
         stompClient.subscribe('/topic/messages/' + sessionUserEmail, function (frame) {

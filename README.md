@@ -48,7 +48,7 @@ docker-compose down
 
 Note that all data in the database will be erased after executing this command.
 
-Also, pri previous Docker image of the Java Spring application should be deleted. This can be achiever using the following command.
+Also, the previous Docker image of the Java Spring application should be deleted. This can be achiever using the following command.
 
 ```
 docker image rmi kiv-pia-silhavyj_app
@@ -83,3 +83,4 @@ Out of all the bonus feature I've decided to pull off the following ones:
 
 - I decided to further extend the overall functionality of the project by adding a profile page that allows users to update their personal information as well as to change their default profile image. The format of the image is supposed to be either `.png`, `.jpg`, or `.jpeg` not exceeding the size of 1 MB.
 - Also, when a user signs up, they're required to confirm their registration via e-mail. All e-mails are HTML e-mails.
+- When signing up, the user is required to be at least 15 y.o.

@@ -36,6 +36,8 @@ These three servers are sitting on the same subnet which was created within `Doc
 
 The web application itself is running over at http://localhost:8080 and the mail server can be found sitting at http://localhost:80. The database server has its default port `5432` exposed to the local machine as well. So, it can be accessed using a database client such as `DBeaver`, for instance.
 
+Every time you're asked to check your e-mail, all you have to do is to navigate to the address mentioned above. Since a mock e-mail server was used, it doesn't really matter what e-mail address you decide to use as the e-mails won't be sent anywhere but to the local e-mail server.
+
 ### Making changes within the Java Spring application
 
 If you want to make any changes within the `Java` application, you should first stop all the running container by executing the following command:
@@ -79,4 +81,5 @@ Out of all the bonus feature I've decided to pull off the following ones:
 
 ## Features added of my own
 
-I decided to further extend the overall functionality of the project by adding a profile page that allows users to update their personal information as well as to change their default profile image. The format of the image is supposed to be either `.png`, `.jpg`, or `.jpeg` not exceeded the size of 1 MB.
+- I decided to further extend the overall functionality of the project by adding a profile page that allows users to update their personal information as well as to change their default profile image. The format of the image is supposed to be either `.png`, `.jpg`, or `.jpeg` not exceeding the size of 1 MB.
+- Also, when a user signs up, they're required to confirm their registration via e-mail. All e-mails are HTML e-mails.

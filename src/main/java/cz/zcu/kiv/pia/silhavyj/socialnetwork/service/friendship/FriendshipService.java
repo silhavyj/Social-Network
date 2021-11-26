@@ -4,7 +4,6 @@ import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.FriendRequest;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.friendship.SearchedUser;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.Role;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.User;
-import cz.zcu.kiv.pia.silhavyj.socialnetwork.model.user.UserRole;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.IFriendRequestRepository;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.repository.IUserRepository;
 import cz.zcu.kiv.pia.silhavyj.socialnetwork.service.user.IRoleService;
@@ -84,12 +83,12 @@ public class FriendshipService implements IFriendshipService {
 
     @Override
     public List<User> getAllReceivedPendingFriends(User sessionUser) {
-        return friendRequestRepository.findAllUsersReceivedFriendRequests(sessionUser.getEmail());
+        return friendRequestRepository.findAllUsersReceivedPendingFriendRequests(sessionUser.getEmail());
     }
 
     @Override
     public List<User> getAllSentPendingFriends(User sessionUser) {
-        return friendRequestRepository.findAllUsersSentFriendRequests(sessionUser.getEmail());
+        return friendRequestRepository.findAllUsersSentPendingFriendRequests(sessionUser.getEmail());
     }
 
     @Override

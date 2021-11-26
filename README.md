@@ -34,7 +34,7 @@ These three servers are sitting on the same subnet which was created within `Doc
 
 ### Accessing the Java Spring application as well as the mail server
 
-The web application itself is running over at http://localhost:8080 and the mail server can be found sitting at http://localhost:80. The database server has its default port `5432` exposed to the local machine as well. So, it can be accessed using a database client such as `DBeaver`, for instance.
+The web application itself is running over at http://localhost:8085 and the mail server can be found sitting at http://localhost:8086. The database server has its default port `5432` exposed to the local machine as well. So, it can be accessed using a database client such as `DBeaver`, for instance.
 
 Every time you're asked to check your e-mail, all you have to do is to navigate to the address mentioned above. Since a mock e-mail server was used, it doesn't really matter what e-mail address you decide to use as the e-mails won't be sent anywhere but to the local e-mail server.
 

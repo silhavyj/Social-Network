@@ -25,14 +25,14 @@ services:
         ipv4_address: 10.5.0.6
     ports:
       - "25:25"                     # expose port 25 (SMTP) out of the docker container to the local machine
-      - "80:80"                     # expose port 80 (HTTP - web UI) out of the docker container to the local machine
+      - "8086:80"                   # expose port 80 (HTTP - web UI) out of the docker container to the local machine
     environment:
       - "TZ=Europe/Prague"          # timezone
 
   app:                              # Spring boot application
     build: .
     ports:
-      - "8080:8080"                 # expose port 8080 (web interface) out of the docker container do the local machine
+      - "8085:8080"                 # expose port 8080 (web interface) out of the docker container do the local machine
     environment:
       - "TZ=Europe/Prague"          # timezone
     networks:

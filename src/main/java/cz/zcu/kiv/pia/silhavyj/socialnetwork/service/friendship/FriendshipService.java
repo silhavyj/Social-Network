@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,9 @@ public class FriendshipService implements IFriendshipService {
      */
     @Override
     public List<SearchedUser> getAllPeople(String name, User sessionUser) {
+        // Make the name uppercase (for searching and matching purposes)
+        name = name.toUpperCase(Locale.ROOT);
+
         // Retrieve all users from the database who "match" the name provided by the client.
         var allPeople = userRepository.searchUsers(name, sessionUser.getEmail());
 

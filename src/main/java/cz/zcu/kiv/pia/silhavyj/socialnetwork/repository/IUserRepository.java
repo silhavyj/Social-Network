@@ -31,7 +31,7 @@ public interface IUserRepository extends JpaRepository<User, Long> {
      * @param sessionUserEmail e-mail address of the session user
      * @return list of matching users
      */
-    @Query("SELECT user FROM User user WHERE user.email <> ?2 AND (user.firstname LIKE %?1% OR user.lastname LIKE %?1%)")
+    @Query("SELECT user FROM User user WHERE user.email <> ?2 AND (upper(user.firstname) LIKE %?1% OR upper(user.lastname) LIKE %?1%)")
     List<User> searchUsers(String name, String sessionUserEmail);
 
     /***

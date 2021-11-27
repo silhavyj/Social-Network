@@ -18,7 +18,7 @@ This will create a `jar` file (package) of the `Java` application. The `jar` fil
 
 ### Starting all docker containers
 
-Once the `jar` file has been created, all you're required to do is to execute the following command:
+Once the `jar` file has been created, all you're required to do is to execute the following command in the root folder of the project structure:
 
 ```
 docker-compose up
@@ -40,34 +40,34 @@ The web application itself is running over at http://127.0.0.1:8085 and the mail
 
 Every time you're asked to check your e-mail, all you have to do is to navigate to the address mentioned above. Since a mock e-mail server was used, it doesn't really matter what e-mail address you decide to use as the e-mails won't be sent anywhere but to the local e-mail server.
 
-#### Testing the application among multiple computers on the seme network
+#### Testing the application among multiple computers on the same network
 
 If you were to test the application using multiple computers sitting on the same network, the following modification would need to be made:
 
-- in `application.yml`, the url would need to be changed from `127.0.0.1` to the IP address of the server. In this case it's `10.10.2.103`.
+- in `application.yml`, the url would need to be changed from `127.0.0.1` to the IP address of the server. In my case, it was `10.10.2.103`.
   ```
     application:
       url:  http://10.10.2.103:8085
   ```
 
-- in `resources/static/js/chat.js`, the URL defined at the very top of the file should be changed from `127.0.0.1` to the server IP address. In this case, it's again `10.10.2.103`.
+- in `resources/static/js/chat.js`, the URL defined at the very top of the file should be changed from `127.0.0.1` to the server IP address. In my case, it's again `10.10.2.103`.
   ```
     const URL = "http://10.10.2.103:8085";
   ```
 
-After all both changes have been made, you need to recompile and rerun the application by taking the steps which are described further below. Also, you might need to temporarily change your firewall rules, so you can access the required ports on the server.
+After both changes have been made, you need to re-compile and re-run the application by taking the steps which are described further below. Also, you might need to temporarily change your firewall rules, so you can access the required ports on the server.
 
 ### Making changes within the Java Spring application
 
-If you want to make any changes within the `Java` application, you should first stop all the running container by executing the following command:
+If you want to make any changes within the `Java` application, you should first stop all the running containers by executing the following command:
 
 ```
 docker-compose down
 ```
 
-Be aware of the fact that all data in the database will be erased after executing this command.
+Be aware of the fact that all data in the database will be erased after executing this command (`application.yml`).
 
-Also, the previous Docker image of the Java Spring application should be deleted. This can be achiever using the following command.
+Also, the previous docker image of the Java Spring application should be deleted. This can be achieved using the following command.
 
 ```
 docker image rmi kiv-pia-silhavyj_app

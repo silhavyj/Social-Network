@@ -30,7 +30,7 @@ function createOnlineFriend(data) {
     const onlineUser = '' +
         '<li onclick=\'openChatWindow("' + data['senderEmail'] + '")\' class="list-group-item" id="online-friend-' + data['senderEmail'] + '" style="cursor:pointer;">\n' +
         '    <div>\n' +
-        '     <i style="color: green;" class="fas fa-circle fa-xs"></i>\n' +
+        '       <i style="color: green;" class="fas fa-circle fa-xs"></i>\n' +
         '        <img src="' + data['profilePicturePath'] + ' " class="img-responsive rounded-circle" width="35" height="35"/>\n' +
         '        <span>' + data['senderFullName'] + '</span>\n' +
         '        <span id="unread-messages-' + data['senderEmail'] + '" class="circle" style="display: none;">0</span>' +

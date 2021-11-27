@@ -1,16 +1,15 @@
 # KIV/PIA - Social Network Project 2021
 
-This is a brief description or guideline of how I tackled this assignment. It also walks you through how to compile the whole project and how to get it up and running. The entire description of the assignment can be found over at https://github.com/osvetlik/pia2020/tree/master/semester-project.
+This is a brief description of how I tackled this assignment. It walks you through how to compile the whole project and how to get it up and running. The entire description of the assignment can be found over at https://github.com/osvetlik/pia2020/tree/master/semester-project.
 
 ## Screenshots of the application
 
 ![Screenshot](doc/01.svg)
-![Screenshot](doc/02.svg)
 ![Screenshot](doc/03.svg)
-
+![Screenshot](doc/02.svg)
 ## How to get it up and running?
 
-There are two dependencies you need to have installed on your system - `Maven` for compiling the java application and `Docker` being able to spin up all the containers required for a smooth run of the whole project.
+There are two dependencies you need to have installed on your system - `Maven` for compiling the java application and `Docker` for being able to spin up all the containers required for a smooth run of the whole project.
 
 ### Compilation of the Java application
 
@@ -22,7 +21,7 @@ mvn clean package
 
 This will create a `jar` file (package) of the `Java` application. The `jar` file itself should be located in the `target` folder which will be created upon successful termination of the command.
 
-### Starting all docker containers
+### Starting docker containers
 
 Once the `jar` file has been created, all you're required to do is to execute the following command in the root folder of the project structure:
 
@@ -42,13 +41,13 @@ These three servers are sitting on the same subnet which was created within `Doc
 
 #### Testing the application on localhost
 
-The web application itself is running over at http://127.0.0.1:8085 and the mail server can be found sitting at http://127.0.0.1:8086. The database server has its default port `5432` exposed to the local machine as well. So, it can be accessed using a database client such as `DBeaver`, for instance.
+The web application itself is running over at http://127.0.0.1:8085 and the mail server can be found sitting at http://127.0.0.1:8086. The database server has its default port `5432` exposed to the local machine as well. So, it can be accessed using a database client such as `DBeaver`, for instance. The credentials can be found in `docker-compose.yml`
 
 Every time you're asked to check your e-mail, all you have to do is to navigate to the address mentioned above. Since a mock e-mail server was used, it doesn't really matter what e-mail address you decide to use as the e-mails won't be sent anywhere but to the local e-mail server.
 
 #### Testing the application among multiple computers on the same network
 
-If you were to test the application using multiple computers sitting on the same network, the following modification would need to be made:
+If you were to test the application using multiple computers sitting on the same network, the following modifications would need to be made:
 
 - in `application.yml`, the url would need to be changed from `127.0.0.1` to the IP address of the server. In my case, it was `10.10.2.103`.
   ```
@@ -76,7 +75,7 @@ Be aware of the fact that all data in the database will be erased after executin
 Also, the previous docker image of the Java Spring application should be deleted. This can be achieved using the following command.
 
 ```
-docker image rmi kiv-pia-silhavyj_app
+docker image rmi social-network_app
 ```
 
 Once all desired changes have been made, you can get the whole project up and running using the same steps as described above. 
@@ -94,11 +93,11 @@ Upon the first start of the application, all the default accounts are logged int
 
 ## Bonus features implemented in the project
 
-Out of all the bonus feature I've decided to pull off the following ones:
+Out of all the bonus feature I decided to pull off the following ones:
 
 - entropy based password strength evaluation
 - password reset using an e-mail (reset link)
-  - The default amount of time the user has to reset their password has been set to 5 minutes (see `application.yml` section `application`)
+  - The default amount of time the user has to reset their password was set to 5 minutes (see `application.yml` section `application`)
 - instant check of the e-mail availability (not being used by an already registered user) on the registration screen (REST)
 - likes
 - Use your Git repo properly and regularly - your activity there should give me a clear idea about your progress (https://github.com/silhavyj/Social-Network)

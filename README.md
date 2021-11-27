@@ -6,7 +6,7 @@ This is a brief description or guideline of how I tackled this assignment. It al
 
 There are two dependencies you need to have installed on your system - `Maven` for compiling the java application and `Docker` being able to spin up all the containers required for a smooth run of the whole project.
 
-### Compilation of the `Java` application
+### Compilation of the Java application
 
 Once you have installed all the dependencies, you can navigate to the root folder of the project structure and execute the following command in the terminal:
 
@@ -34,9 +34,28 @@ These three servers are sitting on the same subnet which was created within `Doc
 
 ### Accessing the Java Spring application as well as the mail server
 
-The web application itself is running over at http://localhost:8085 and the mail server can be found sitting at http://localhost:8086. The database server has its default port `5432` exposed to the local machine as well. So, it can be accessed using a database client such as `DBeaver`, for instance.
+#### Testing the application on localhost
+
+The web application itself is running over at http://127.0.0.1:8085 and the mail server can be found sitting at http://127.0.0.1:8086. The database server has its default port `5432` exposed to the local machine as well. So, it can be accessed using a database client such as `DBeaver`, for instance.
 
 Every time you're asked to check your e-mail, all you have to do is to navigate to the address mentioned above. Since a mock e-mail server was used, it doesn't really matter what e-mail address you decide to use as the e-mails won't be sent anywhere but to the local e-mail server.
+
+#### Testing the application among multiple computers on the seme network
+
+If you were to test the application using multiple computers sitting on the same network, the following modification would need to be made:
+
+- in `application.yml`, the url would need to be changed from `127.0.0.1` to the IP address of the server. In this case it's `10.10.2.103`.
+  ```
+    application:
+      url:  http://10.10.2.103:8085
+  ```
+
+- in `resources/static/js/chat.js`, the URL defined at the very top of the file should be changed from `127.0.0.1` to the server IP address. In this case, it's again `10.10.2.103`.
+  ```
+    const URL = "http://10.10.2.103:8085";
+  ```
+
+After all both changes have been made, you need to recompile and rerun the application by taking the steps which are described further below. Also, you might need to temporarily change your firewall rules, so you can access the required ports on the server.
 
 ### Making changes within the Java Spring application
 
@@ -46,7 +65,7 @@ If you want to make any changes within the `Java` application, you should first 
 docker-compose down
 ```
 
-Note that all data in the database will be erased after executing this command.
+Be aware of the fact that all data in the database will be erased after executing this command.
 
 Also, the previous Docker image of the Java Spring application should be deleted. This can be achiever using the following command.
 

@@ -1,3 +1,5 @@
+const URL = "http://127.0.0.1:8085";
+
 let stompClient;
 let sessionUserEmail;
 
@@ -7,7 +9,7 @@ const messages = new Map();
 
 function connectToChat() {
     sessionUserEmail = $('#session-user-email').text();
-    var socket = new SockJS("http://localhost:8085/ws");
+    var socket = new SockJS(URL + "/ws");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function () {
         stompClient.subscribe('/topic/messages/' + sessionUserEmail, function (frame) {

@@ -19,11 +19,6 @@ public class TokenService implements ITokenService {
     private final ITokenRepository tokenRepository;
 
     @Override
-    public Optional<Token> getRegistrationTokenByUserEmail(String email) {
-        return tokenRepository.findRegistrationTokenByEmail(email);
-    }
-
-    @Override
     public Optional<Token> getRegistrationTokenByTokenValue(String token) {
         return tokenRepository.findRegistrationTokenByValue(token);
     }
@@ -36,8 +31,9 @@ public class TokenService implements ITokenService {
     @Override
     public Optional<User> getGetUserByResetPasswordTokenValue(String tokenValue) {
         Optional<Token> token = tokenRepository.findResetPasswordTokenByValue(tokenValue);
-        if (isTokenExpired(token))
+        if (isTokenExpired(token)) {
             return Optional.empty();
+        }
         return Optional.of(token.get().getUser());
     }
 
@@ -63,8 +59,9 @@ public class TokenService implements ITokenService {
     }
 
     boolean isTokenExpired(Optional<Token> token) {
-        if (token.isEmpty())
+        if (token.isEmpty()) {
             return true;
+        }
         if (token.get().getExpiresAt().isBefore(now())) {
             deleteToken(token.get());
             return true;

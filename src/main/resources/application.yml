@@ -44,7 +44,7 @@ spring:
           writetimeout: 5000
 
 application:
-  url:  http://localhost:8085
+  url:  http://127.0.0.1:8085
   senderemail: socialnetwork@silhavyj.pia.kiv.zcu.cz     # email address of the sender
   searchnameminlen: 3                                    # at least 3 letters must be provided when search a person
   resetpasswordexpirationtime: 5                         # when resetting a password, the user has 5 mins to do so until the token expires

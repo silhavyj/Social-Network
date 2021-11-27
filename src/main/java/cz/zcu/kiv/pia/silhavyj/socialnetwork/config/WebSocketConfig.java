@@ -1,5 +1,6 @@
 package cz.zcu.kiv.pia.silhavyj.socialnetwork.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -15,7 +16,10 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  */
 @Configuration
 @EnableWebSocketMessageBroker
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final AppConfiguration appConfiguration;
 
     /***
      * Configures the message broker (destination prefixes, ...)
@@ -36,8 +40,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry
             .addEndpoint("/ws")
-            .setAllowedOriginPatterns("*")
+            // .setAllowedOriginPatterns("*")
             // .setAllowedOrigins("http://10.10.2.103:8085")
+                .setAllowedOrigins(appConfiguration.getUrl())
             .withSockJS();
     }
 }

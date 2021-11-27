@@ -118,6 +118,11 @@ public class FriendshipController {
         String sessionUserEmail = authentication.getName();
         User sessionUser = userService.getUserByEmail(sessionUserEmail).get();
 
+        // Make sure the user is not attempting to send a friend request to themselves
+        if (sessionUserEmail.equals(email)) {
+            return ResponseEntity.badRequest().body(INVALID_FRIEND_ERR_MSG);
+        }
+
         // Make sure that the user who will be sent a friend request indeed exists in the database.
         Optional<User> receiver = userService.getUserByEmail(email);
         if (receiver.isEmpty()) {

@@ -22,4 +22,5 @@ public class FriendshipConstants {
     public static final String USER_SUCCESSFULLY_BLOCKED_INFO_MSG = "User has been successfully blocked";
     public static final String FRIENDSHIP_CANNOT_BE_UNBLOCKED_ERR_MSG = "Friendship cannot be unblocked";
     public static final String FRIENDSHIP_SUCCESSFULLY_UNBLOCKED = "User has been successfully unblocked";
+    public static final String INVALID_FRIEND_ERR_MSG = "You cannot send a friend request to yourself";
 }

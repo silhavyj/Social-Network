@@ -1,8 +1,13 @@
+// searches users in the database
 async function searchUsers(event) {
+    // disable default actions
     event.preventDefault();
+
+    // make sure the searched name isn't empty
     let name = $('#searched_name').val();
     if (name == "")
         name = "1";
+
     $.ajax({
         type: "GET",
         url: "/people/" + name,
@@ -14,8 +19,11 @@ async function searchUsers(event) {
                 $('#friends-msg-container').html(createErrorMessage(response.responseText));
                 return;
             }
+            // parse the response
             let users = JSON.parse(response.responseText);
             let table = '';
+
+            // display found users
             for (let index in users)
                 table += createARecordInSearchResultsTable(users[index]);
             $('#searched_users').html(table);
@@ -23,6 +31,7 @@ async function searchUsers(event) {
     });
 }
 
+// Creates an error message
 function createErrorMessage(message) {
     return '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
         '   <strong>Error: </strong>\n' +
@@ -33,6 +42,7 @@ function createErrorMessage(message) {
         '</div>';
 }
 
+// Creates one found user (result of the search)
 function createARecordInSearchResultsTable(user) {
     let row = '<tr>' +
     '   <td><img src="' + user['profilePicturePath'] + '" class="img-thumbnail" style="width: 30%;"/></td>\n' +
@@ -48,6 +58,7 @@ function createARecordInSearchResultsTable(user) {
     return row;
 }
 
+// Sends a friend request
 function sendFriendRequest(tdObject, email) {
     $.ajax({
         type: "POST",
@@ -63,6 +74,7 @@ function sendFriendRequest(tdObject, email) {
     });
 }
 
+// Cancels a friend request
 async function cancelFriendRequest(email) {
     $.ajax({
         type: "DELETE",
@@ -73,6 +85,7 @@ async function cancelFriendRequest(email) {
     });
 }
 
+// Accepts a friend request
 async function acceptFriendRequest(email) {
     $.ajax({
         type: "PUT",
@@ -83,6 +96,7 @@ async function acceptFriendRequest(email) {
     });
 }
 
+// BLocks a user
 async function blockUser(email) {
     $.ajax({
         type: "PUT",
@@ -93,6 +107,7 @@ async function blockUser(email) {
     });
 }
 
+// Unblocks a user
 async function unblockUser(email) {
     $.ajax({
         type: "DELETE",
@@ -103,6 +118,7 @@ async function unblockUser(email) {
     });
 }
 
+// make user an admin
 async function escalateToAdmin(email) {
     $.ajax({
         type: "PUT",
@@ -113,6 +129,7 @@ async function escalateToAdmin(email) {
     });
 }
 
+// remove admin privileges from a user
 async function removeAdminPrivileges(email) {
     $.ajax({
         type: "DELETE",

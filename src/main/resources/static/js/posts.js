@@ -1,3 +1,4 @@
+// Creates a post
 function submit_post() {
     const content = $('#new-post-content').val();
     if (content.trim().length == 0)
@@ -19,6 +20,7 @@ function submit_post() {
     });
 }
 
+// Fetches down all the user's latest posts
 function fetchUsersPosts() {
     $.ajax({
         type: "GET",
@@ -29,6 +31,8 @@ function fetchUsersPosts() {
             let posts = JSON.parse(response.responseText);
             let html = '';
             let modals = '';
+
+            // Render the post
             for (let index in posts) {
                 html += createPost(posts[index], posts[index]['user']);
                 modals += createPopUpOfPeopleWhoLikedPost(posts[index]);
@@ -39,6 +43,7 @@ function fetchUsersPosts() {
     });
 }
 
+// Sets up a times that updates the posts on the main page every 60s
 function setFetchPostsTimer() {
     fetchLatestPosts();
     setInterval(function(){
@@ -46,6 +51,7 @@ function setFetchPostsTimer() {
     }, 60 * 1000);
 }
 
+// Fetches down all the latest posts (posts + announcements)
 function fetchLatestPosts() {
     $.ajax({
         type: "GET",
@@ -58,6 +64,8 @@ function fetchLatestPosts() {
             let user = JSON.parse(response.responseText)['user'];
             let html = '';
             let modals = '';
+
+            // Render the posts
             for (let index in posts) {
                 html += createPost(posts[index], user);
                 modals += createPopUpOfPeopleWhoLikedPost(posts[index]);
@@ -68,6 +76,7 @@ function fetchLatestPosts() {
     });
 }
 
+// Creates a pop up modal of people who have liked the post/announcement
 function createPopUpOfPeopleWhoLikedPost(post) {
     return '    <div class="modal fade" id="' + post['id'] + 'Modal" tabindex="-1" role="dialog" aria-labelledby="' + post['id'] + 'Modal" aria-hidden="true">\n' +
         '        <div class="modal-dialog" role="document">\n' +
@@ -83,6 +92,7 @@ function createPopUpOfPeopleWhoLikedPost(post) {
         '    </div>';
 }
 
+// Generates a list (<ul>) of people who have liked the post/announcement
 function generateListOfPeopleWhoLikesPost(post) {
     let html = '';
     for (let index in post['likes'])
@@ -90,14 +100,17 @@ function generateListOfPeopleWhoLikesPost(post) {
     return html;
 }
 
+// Generates an <li> containing a person who has like the post/announcement
 function generatePersonWhoLikedPost(like) {
     return '<li class="list-group-item"><img class="img-responsive rounded-circle" width="30" height="30" src="' + like['user']['profilePicturePath'] +'"/><span> ' + like['user']['firstname'] + ' ' +  like['user']['lastname'] + '</span></li>';
 }
 
+// Checks if the posts is created by the session user
 function isUsersPosts(post, user) {
     return post['user']['email'] == user['email'];
 }
 
+// Checks if the user has already liked the post/announcement
 function hasUserAlreadyLiked(likes, user) {
     for (let i in likes) {
         if (likes[i]['user']['email'] == user['email'])
@@ -106,12 +119,14 @@ function hasUserAlreadyLiked(likes, user) {
     return false;
 }
 
+// Generates the action of the like button (like/unlike)
 function generateLikeOnClickEven(post, user) {
     if (hasUserAlreadyLiked(post['likes'], user))
         return 'onclick="unlikePost(' + post['id'] + ')"';
     return 'onclick="likePost(' + post['id'] + ')"';
 }
 
+// Renders a post/announcement
 function createPost(post, user) {
     const usersPost = isUsersPosts(post, user);
     const hasBeenLiked = hasUserAlreadyLiked(post['likes'], user);
@@ -150,6 +165,7 @@ function createPost(post, user) {
         '    </div>';
 }
 
+// Likes a post
 function likePost(postId) {
     $.ajax({
         type: "POST",
@@ -160,6 +176,7 @@ function likePost(postId) {
     });
 }
 
+// Unlikes a post
 function unlikePost(postId) {
     $.ajax({
         type: "DELETE",
@@ -170,6 +187,7 @@ function unlikePost(postId) {
     });
 }
 
+// Fetches down all the user's latest announcements
 function fetchAnnouncements() {
     $.ajax({
         type: "GET",
@@ -191,6 +209,7 @@ function fetchAnnouncements() {
     });
 }
 
+// Creates an announcement
 function submit_announcement() {
     const content = $('#new-announcement-content').val();
     if (content.trim().length == 0)

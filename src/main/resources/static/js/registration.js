@@ -1,3 +1,5 @@
+// Checks if an e-mail address is already taken
+// by another user or not - sent when the input gets focused off
 async function testEmailExistence(email) {
     $.ajax({
         type: "GET",

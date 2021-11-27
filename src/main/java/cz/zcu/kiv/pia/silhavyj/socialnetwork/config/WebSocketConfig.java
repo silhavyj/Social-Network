@@ -19,6 +19,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    /*** instance of AppConfiguration (getting the URL) */
     private final AppConfiguration appConfiguration;
 
     /***
@@ -40,9 +41,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry
             .addEndpoint("/ws")
-            // .setAllowedOriginPatterns("*")
-            // .setAllowedOrigins("http://10.10.2.103:8085")
-                .setAllowedOrigins(appConfiguration.getUrl())
+            .setAllowedOrigins(appConfiguration.getUrl())
             .withSockJS();
     }
 }

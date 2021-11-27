@@ -2,6 +2,12 @@
 
 This is a brief description or guideline of how I tackled this assignment. It also walks you through how to compile the whole project and how to get it up and running. The entire description of the assignment can be found over at https://github.com/osvetlik/pia2020/tree/master/semester-project.
 
+## Screenshots of the application
+
+![Screenshot](doc/01.svg)
+![Screenshot](doc/02.svg)
+![Screenshot](doc/03.svg)
+
 ## How to get it up and running?
 
 There are two dependencies you need to have installed on your system - `Maven` for compiling the java application and `Docker` being able to spin up all the containers required for a smooth run of the whole project.

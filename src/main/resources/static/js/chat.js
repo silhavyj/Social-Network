@@ -108,6 +108,10 @@ function openChatWindow(userEmail) {
 function renderMessage(message) {
     message = JSON.parse(message);
 
+    const encodedHTMLContent = message['message'] .replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+        return '&#'+i.charCodeAt(0)+';';
+    });
+
     // Check if it's a received or sent message
     if (message['messageType'] === 'MESSAGE') {
 
@@ -122,7 +126,7 @@ function renderMessage(message) {
             '    <div class="container">\n' +
             '        <div class="row">\n' +
             '            <img src="' + message['profilePicturePath'] + '" class="img-responsive rounded-circle mr-3" width="30" height="30">\n' +
-            '             <p class="p-2 bg-dark text-white outcoming-message">' + message['message'] + '</p>\n' +
+            '             <p class="p-2 bg-dark text-white outcoming-message">' + encodedHTMLContent + '</p>\n' +
             '        </div>\n' +
             '        <div class="row">\n' +
             '            <p class="text-secondary message-timestamp">' + timeStamp + '</p>\n' +
@@ -133,7 +137,7 @@ function renderMessage(message) {
         return '' +
             '<div class="row">\n' +
             '    <div class="container">\n' +
-            '         <p class="p-2 bg-light text-dark incoming-message">' + message['message'] + '</p>\n' +
+            '         <p class="p-2 bg-light text-dark incoming-message">' + encodedHTMLContent + '</p>\n' +
             '    </div>\n' +
             '    <div class="container">\n' +
             '         <p class="text-secondary message-timestamp message-timestamp-right">' + message['timeStamp'] + '</p>\n' +

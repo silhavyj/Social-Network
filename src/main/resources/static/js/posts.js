@@ -130,6 +130,9 @@ function generateLikeOnClickEven(post, user) {
 function createPost(post, user) {
     const usersPost = isUsersPosts(post, user);
     const hasBeenLiked = hasUserAlreadyLiked(post['likes'], user);
+    const encodedHTMLContent = post['content'] .replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+        return '&#'+i.charCodeAt(0)+';';
+    });
 
     return '    <div class="card mt-4 text-dark ' + (post['postType'] == "ANNOUNCEMENT" ? "border-primary " : " ") + 'mb-3" style="width: 70%; margin: auto">\n' +
         '      <div class="card-header">\n' +
@@ -150,7 +153,7 @@ function createPost(post, user) {
         '        </div>\n' +
         '      </div>\n' +
         '      <div class="card-body ' + (post['postType'] == "ANNOUNCEMENT" ? "text-primary" : "") + '">\n' +
-        '        <p class="card-text">' + post['content'] + '</p>\n' +
+        '        <p class="card-text">' + encodedHTMLContent + '</p>\n' +
         '      </div>\n' +
         '      <div class="card-footer text-muted">\n' +
         '        <div class="row">\n' +

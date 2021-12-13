@@ -23,6 +23,12 @@ async function searchUsers(event) {
             let users = JSON.parse(response.responseText);
             let table = '';
 
+            // display an info message saying that no users were found
+            if (users.length == 0) {
+                $('#friends-msg-container').html(createInfoMessage('No users were found'));
+                return;
+            }
+
             // display found users
             for (let index in users)
                 table += createARecordInSearchResultsTable(users[index]);
@@ -35,6 +41,16 @@ async function searchUsers(event) {
 function createErrorMessage(message) {
     return '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
         '   <strong>Error: </strong>\n' +
+        '   <span>' + message + '</span>\n' +
+        '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
+        '   <span aria-hidden="true">&times;</span>\n' +
+        '   </button>\n' +
+        '</div>';
+}
+
+// Creates an info message
+function createInfoMessage(message) {
+    return '<div class="alert alert-info alert-dismissible fade show" role="alert">\n' +
         '   <span>' + message + '</span>\n' +
         '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
         '   <span aria-hidden="true">&times;</span>\n' +
